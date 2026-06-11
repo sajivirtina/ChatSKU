@@ -1,0 +1,146 @@
+/* ═══════════════════════════════════════════════════════════════════════════════
+   Button Components
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.chatsku-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: 14px 28px;
+    font-family: var(--font-sans);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    border-radius: var(--radius-button);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition:
+        background var(--transition-fast),
+        color var(--transition-fast),
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast),
+        transform var(--transition-bounce);
+    white-space: nowrap;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.chatsku-btn:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+}
+
+.chatsku-btn:active {
+    transform: scale(0.97);
+}
+
+/* ── Primary ─────────────────────────────────────────────────────────────── */
+.chatsku-btn--primary {
+    background: var(--color-accent);
+    color: #0f172a;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 20px var(--color-accent-glow);
+}
+
+.chatsku-btn--primary:hover {
+    background: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+    color: #0f172a;
+    box-shadow: 0 0 32px var(--color-accent-glow-lg);
+    transform: translateY(-2px);
+}
+
+/* ── Secondary / Outline ─────────────────────────────────────────────────── */
+.chatsku-btn--secondary {
+    background: transparent;
+    color: var(--color-text-primary);
+    border-color: var(--color-border-hover);
+}
+
+.chatsku-btn--secondary:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: var(--color-text-primary);
+    transform: translateY(-2px);
+}
+
+/* ── Ghost ───────────────────────────────────────────────────────────────── */
+.chatsku-btn--ghost {
+    background: transparent;
+    color: var(--color-accent);
+    border-color: transparent;
+}
+
+.chatsku-btn--ghost:hover {
+    background: var(--color-accent-glow);
+    color: var(--color-accent);
+}
+
+/* ── Accent Outline ──────────────────────────────────────────────────────── */
+.chatsku-btn--outline-accent {
+    background: transparent;
+    color: var(--color-accent);
+    border-color: var(--color-border-accent);
+}
+
+.chatsku-btn--outline-accent:hover {
+    background: var(--color-accent-glow);
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+/* ── Sizes ───────────────────────────────────────────────────────────────── */
+.chatsku-btn--sm {
+    padding: 10px 20px;
+    font-size: var(--font-size-sm);
+}
+
+.chatsku-btn--lg {
+    padding: 18px 36px;
+    font-size: var(--font-size-lg);
+    border-radius: var(--radius-lg);
+}
+
+.chatsku-btn--xl {
+    padding: 20px 44px;
+    font-size: var(--font-size-xl);
+    border-radius: var(--radius-lg);
+}
+
+/* ── Full width ──────────────────────────────────────────────────────────── */
+.chatsku-btn--full { width: 100%; }
+
+/* ── Icon inside button ──────────────────────────────────────────────────── */
+.chatsku-btn svg,
+.chatsku-btn .btn-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    transition: transform var(--transition-fast);
+}
+
+.chatsku-btn:hover svg { transform: translateX(2px); }
+
+/* ── Arrow button (text link style) ─────────────────────────────────────── */
+.chatsku-link-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-accent);
+    font-weight: 500;
+    font-size: var(--font-size-base);
+    text-decoration: none;
+    transition: gap var(--transition-fast), color var(--transition-fast);
+}
+
+.chatsku-link-arrow:hover {
+    gap: var(--space-3);
+    color: var(--color-accent-light);
+}
+
+.chatsku-link-arrow::after {
+    content: '→';
+    transition: transform var(--transition-fast);
+}
