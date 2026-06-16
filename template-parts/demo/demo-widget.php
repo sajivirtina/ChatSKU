@@ -63,15 +63,14 @@ if ( $sy_term ) {
 	$tips[] = [ 'cls' => 'synonym', 'icon' => '&asymp;', 'html' => $h, 'query' => $sy_term ];
 }
 
-// Questions + detect any Spanish
+// Questions + detect any Spanish / French
 $questions = $f( 'demo_questions', [] );
 $has_es    = false;
+$has_fr    = false;
 if ( is_array( $questions ) ) {
 	foreach ( $questions as $q ) {
-		if ( ! empty( $q['q_text_es'] ) || ! empty( $q['q_query_es'] ) ) {
-			$has_es = true;
-			break;
-		}
+		if ( ! empty( $q['q_text_es'] ) || ! empty( $q['q_query_es'] ) ) { $has_es = true; }
+		if ( ! empty( $q['q_text_fr'] ) || ! empty( $q['q_query_fr'] ) ) { $has_fr = true; }
 	}
 }
 
@@ -148,10 +147,10 @@ $GLOBALS['cdw_assets_printed'] = true;
 				<?php endif; ?>
 
 				<?php if ( $questions ) : ?>
-					<?php if ( $has_es ) : ?>
+					<?php if ( $has_es || $has_fr ) : ?>
 					<div class="cdw__lang" role="group" aria-label="Question language">
 						<button type="button" class="cdw__lang-btn is-active" data-lang="en" aria-pressed="true">English</button>
-						<button type="button" class="cdw__lang-btn" data-lang="es" aria-pressed="false">Español</button>
+						<?php if ( $has_es ) : ?><button type="button" class="cdw__lang-btn" data-lang="es" aria-pressed="false">Español</button><?php endif; ?><?php if ( $has_fr ) : ?><button type="button" class="cdw__lang-btn" data-lang="fr" aria-pressed="false">Français</button><?php endif; ?>
 					</div>
 					<?php endif; ?>
 					<div class="cdw__qlist">
@@ -161,15 +160,18 @@ $GLOBALS['cdw_assets_printed'] = true;
 							$qq  = ! empty( $q['q_query'] ) ? $q['q_query'] : $qt;
 							$qte = ! empty( $q['q_text_es'] ) ? $q['q_text_es'] : $qt;
 							$qqe = ! empty( $q['q_query_es'] ) ? $q['q_query_es'] : $qq;
+							$qtf = ! empty( $q['q_text_fr'] ) ? $q['q_text_fr'] : $qt;
+							$qqf = ! empty( $q['q_query_fr'] ) ? $q['q_query_fr'] : $qq;
 						?>
 						<button class="cdw__q cdw-try" type="button"
 							data-query-en="<?php echo esc_attr( $qq ); ?>"
 							data-query-es="<?php echo esc_attr( $qqe ); ?>"
+							data-query-fr="<?php echo esc_attr( $qqf ); ?>"
 							data-query="<?php echo esc_attr( $qq ); ?>">
 							<?php if ( ! empty( $q['q_label'] ) ) : ?>
 							<span class="cdw__q-label"><?php echo esc_html( $q['q_label'] ); ?></span>
 							<?php endif; ?>
-							<span class="cdw__q-text" data-en="<?php echo esc_attr( $qt ); ?>" data-es="<?php echo esc_attr( $qte ); ?>"><?php echo esc_html( $qt ); ?></span>
+							<span class="cdw__q-text" data-en="<?php echo esc_attr( $qt ); ?>" data-es="<?php echo esc_attr( $qte ); ?>" data-fr="<?php echo esc_attr( $qtf ); ?>"><?php echo esc_html( $qt ); ?></span>
 						</button>
 						<?php endforeach; ?>
 					</div>
@@ -282,7 +284,7 @@ $GLOBALS['cdw_assets_printed'] = true;
 	});
 
 	function setLang(lang) {
-		var S = lang === 'es' ? 'es' : 'en';
+		var S = (lang === 'es' || lang === 'fr') ? lang : 'en';
 		root.querySelectorAll('.cdw__q').forEach(function (q) {
 			var t = q.querySelector('.cdw__q-text');
 			if (t && t.dataset[S]) t.textContent = t.dataset[S];

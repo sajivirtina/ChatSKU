@@ -72,6 +72,8 @@ acf_add_local_field_group( [
 				[ 'key' => 'field_q_query',   'label' => 'Query (sent to widget)', 'name' => 'q_query', 'type' => 'textarea', 'rows' => 2, 'instructions' => 'Full question sent to the chat. Leave blank to use the shown text.' ],
 				[ 'key' => 'field_q_text_es', 'label' => 'Question — Spanish (optional)', 'name' => 'q_text_es', 'type' => 'text' ],
 				[ 'key' => 'field_q_query_es','label' => 'Query — Spanish (optional)', 'name' => 'q_query_es', 'type' => 'textarea', 'rows' => 2 ],
+					[ 'key' => 'field_q_text_fr', 'label' => 'Question — French (optional)', 'name' => 'q_text_fr', 'type' => 'text' ],
+					[ 'key' => 'field_q_query_fr','label' => 'Query — French (optional)', 'name' => 'q_query_fr', 'type' => 'textarea', 'rows' => 2 ],
 			],
 		],
 
