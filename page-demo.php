@@ -60,10 +60,20 @@ $theme_uri = get_template_directory_uri();
 
                         <p class="demo-panel__lead demo-panel__lead--italic">Or try natural language queries:</p>
 
+                        <div class="demo-lang" role="group" aria-label="Question language">
+                            <button type="button" class="demo-lang-btn demo-lang-btn--active" data-lang="en" aria-pressed="true">English</button>
+                            <button type="button" class="demo-lang-btn" data-lang="es" aria-pressed="false">Español</button>
+                        </div>
+
                         <ul class="demo-tips-list demo-tips-list--nl">
                             <li class="demo-tips-list__item">
-                                <span class="demo-tip__query">Do you have a 1/4 inch stainless steel ball valve for high pressure?</span>
-                                <button class="demo-try-btn" type="button" data-query="Do you have a 2 inch stainless steel ball valve for high pressure?">Try It</button>
+                                <span class="demo-tip__query" id="demo-q1-text"
+                                    data-en="Do you have a 1/4 inch stainless steel ball valve for high pressure?"
+                                    data-es="¿Tienen una válvula de bola de acero inoxidable de 1/4 de pulgada para alta presión?">Do you have a 1/4 inch stainless steel ball valve for high pressure?</span>
+                                <button id="demo-q1-btn" class="demo-try-btn" type="button"
+                                    data-query-en="Do you have a 1/4 inch stainless steel ball valve for high pressure?"
+                                    data-query-es="¿Tienen una válvula de bola de acero inoxidable de 1/4 de pulgada para alta presión?"
+                                    data-query="Do you have a 1/4 inch stainless steel ball valve for high pressure?">Try It</button>
                             </li>
                             <li class="demo-tips-list__item">
                                 <span class="demo-tip__query">I need safety glasses that are anti-fog for my warehouse</span>
@@ -593,6 +603,10 @@ $theme_uri = get_template_directory_uri();
     background: rgba(0, 201, 177, 0.12);
     color: var(--color-accent);
 }
+
+.demo-lang { display: inline-flex; background: var(--color-bg-secondary); border: 1px solid var(--color-border); border-radius: 8px; padding: 3px; margin-bottom: var(--space-3); gap: 2px; }
+.demo-lang-btn { background: transparent; border: none; border-radius: 6px; color: var(--color-text-muted); font-family: var(--font-sans); font-size: 13px; font-weight: 600; padding: 6px 14px; cursor: pointer; transition: background 0.2s, color 0.2s; }
+.demo-lang-btn--active { background: rgba(0, 201, 177, 0.12); color: var(--color-accent); }
 
 /* ── Widget card ─────────────────────────────────────────────────── */
 .demo-widget-card {
@@ -1186,12 +1200,30 @@ $theme_uri = get_template_directory_uri();
     /* ─────────────────────────────────────────────────────────────────
        BOOT
     ───────────────────────────────────────────────────────────────── */
+    /* EN/ES toggle for the first natural-language query only */
+    function setDemoQ1Lang(lang){
+        var S = lang==='es' ? 'es' : 'en';
+        var txt = document.getElementById('demo-q1-text'), btn = document.getElementById('demo-q1-btn');
+        if (txt) txt.textContent = txt.dataset[S];
+        if (btn) btn.dataset.query = btn.getAttribute('data-query-'+S);
+        document.querySelectorAll('.demo-lang-btn').forEach(function(b){
+            var on = b.dataset.lang===S;
+            b.classList.toggle('demo-lang-btn--active', on);
+            b.setAttribute('aria-pressed', on?'true':'false');
+        });
+    }
+    function initDemoQ1Lang(){
+        document.querySelectorAll('.demo-lang-btn').forEach(function(b){ b.addEventListener('click', function(){ setDemoQ1Lang(b.dataset.lang); }); });
+        setDemoQ1Lang('en');
+    }
+
     function init() {
         initTabs();
         initModeToggle();
         initTryItButtons();
         initImageButtons();
         initCarousel();
+        initDemoQ1Lang();
 
         /* Snapshot all current <body> children BEFORE any widget script runs.
            loadWidget() will use this to remove everything the widget injects. */

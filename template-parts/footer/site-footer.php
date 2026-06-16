@@ -45,9 +45,10 @@ $logo = chatsku_option( 'site_logo' );
             <div class="footer-column">
                 <h4 class="footer-column__heading">Product</h4>
                 <?php
-                if ( has_nav_menu( 'footer' ) ) {
+                if ( wp_get_nav_menu_object( 10 ) || has_nav_menu( 'footer' ) ) {
                     wp_nav_menu( [
-                        'theme_location' => 'footer',
+                        'menu'           => 10,        // user-created footer menu (ID 10)
+                        'theme_location' => 'footer',  // used if menu 10 is absent (e.g. other environments)
                         'menu_class'     => 'footer-column__links',
                         'container'      => false,
                         'depth'          => 1,
@@ -83,6 +84,17 @@ $logo = chatsku_option( 'site_logo' );
                         </a>
                     </li>
                 </ul>
+                <?php
+                if ( wp_get_nav_menu_object( 11 ) ) {
+                    wp_nav_menu( [
+                        'menu'        => 11,        // secondary footer menu (ID 11), below the contact email
+                        'menu_class'  => 'footer-column__links footer-column__menu',
+                        'container'   => false,
+                        'depth'       => 1,
+                        'fallback_cb' => false,
+                    ] );
+                }
+                ?>
             </div><!-- .footer-column -->
 
         </div><!-- .footer-main__grid -->
@@ -186,6 +198,10 @@ $logo = chatsku_option( 'site_logo' );
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+.footer-column__menu {
+    margin-top: 14px;
 }
 
 .footer-column__links a {

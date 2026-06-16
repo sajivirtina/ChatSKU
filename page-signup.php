@@ -220,29 +220,9 @@ get_header();
             <p class="signup-page__subtitle">Tell us a bit about your business and we'll get you set up.</p>
 
             <!-- Revenutize embed container -->
-            <div class="signup-revenutize-wrap" id="signup-embed-wrap">
-                <!-- Loading spinner (hidden once form loads) -->
-                <div class="signup-spinner" id="signup-spinner" aria-label="Loading signup form">
-                    <span class="signup-spinner__ring"></span>
-                </div>
-                <!-- Revenutize: token div + inline script must be adjacent -->
-                <div data-cf-token="af175cab1678fbf8897bb299afc5d6fb92e8234926d5fd3bba6c62882ef17efe"></div>
-                <script>
-                (function(){
-                    var t = "af175cab1678fbf8897bb299afc5d6fb92e8234926d5fd3bba6c62882ef17efe",
-                        u = "https://revenutize.com";
-                    var s = document.createElement("script");
-                    s.src = u + "/api/public/forms/widget.js";
-                    s.setAttribute("data-token", t);
-                    s.setAttribute("data-base-url", u);
-                    s.onload = s.onerror = function() {
-                        var spinner = document.getElementById("signup-spinner");
-                        if (spinner) spinner.style.display = "none";
-                    };
-                    // Insert before this script so widget.js finds [data-cf-token] as its previousSibling
-                    document.currentScript.parentNode.insertBefore(s, document.currentScript);
-                })();
-                </script>
+           <div data-cf-token="41e76aa4602e092356c2466d2fe818150f2adf302af9b591c61392aeef766a65"></div>
+
+<script>(function(){var t="41e76aa4602e092356c2466d2fe818150f2adf302af9b591c61392aeef766a65",u="https://revenutize.com";var s=document.createElement("script");s.src=u+"/api/public/forms/widget.js";s.setAttribute("data-token",t);s.setAttribute("data-base-url",u);document.currentScript.parentNode.insertBefore(s,document.currentScript);})()</script>
             </div>
         </div>
     </div>

@@ -27,7 +27,14 @@ if ( function_exists( 'acf_add_options_page' ) ) {
 // Register ACF field groups programmatically (fallback + for version control)
 if ( function_exists( 'acf_add_local_field_group' ) ) {
     require_once CHATSKU_DIR . '/inc/acf-fields.php';
+    require_once CHATSKU_DIR . '/inc/acf-fields-demo.php';
 }
+
+// Demo custom post type + [chatsku_demo_widget] shortcode
+require_once CHATSKU_DIR . '/inc/cpt-demo.php';
+
+// Bespoke Calgary Chocolate Factory live-demo section — [chatsku_calgary_demo]
+require_once CHATSKU_DIR . '/inc/shortcode-calgary-demo.php';
 
 // ─── ACF Local JSON ───────────────────────────────────────────────────────────
 // Save ACF field group JSON to theme folder (version control friendly)

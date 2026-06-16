@@ -76,7 +76,7 @@
     .btn-outline:hover { background: var(--blue); color: #fff; }
 
     /* ── HERO — blue panel over lab photography ── */
-    .hero { position: relative; height: 380px; overflow: hidden; background: linear-gradient(110deg, #B8D4F0 0%, #C8E4FF 40%, #D8EEFF 60%, #AACCE8 100%); }
+    .hero1 { position: relative; height: 400px; overflow: hidden; background: linear-gradient(110deg, #B8D4F0 0%, #C8E4FF 40%, #D8EEFF 60%, #AACCE8 100%); }
     .hero-bg { position: absolute; inset: 0; }
     .hero-bg::before {
       content: '';
@@ -126,6 +126,10 @@
     .demo-try-btn { display: block; width: 100%; text-align: left; background: var(--white); border: 1px solid var(--gray-rule); border-left: 3px solid var(--blue-mid); border-radius: var(--r); padding: 13px 16px; font-family: var(--font-body); font-size: 13.5px; color: var(--near-black); line-height: 1.55; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s; }
     .demo-try-btn:hover { border-color: var(--blue); box-shadow: var(--shadow); transform: translateX(2px); }
     .demo-try-btn .demo-try-label { display: block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--blue-mid); margin-bottom: 4px; }
+    .bs-lang { display: inline-flex; gap: 2px; background: var(--white); border: 1px solid var(--gray-rule); border-radius: 999px; padding: 3px; margin-bottom: 12px; }
+    .bs-lang__btn { background: none; border: none; padding: 5px 14px; font-family: var(--font-body); font-size: 12px; font-weight: 700; color: var(--gray-md); border-radius: 999px; cursor: pointer; transition: background 0.15s, color 0.15s; }
+    .bs-lang__btn.is-active { background: var(--blue); color: #fff; }
+    .bs-q-text { display: block; }
     .bs-demo-right { position: sticky; top: 92px; }
     .demo-mode-toggle { display: inline-flex; gap: 4px; background: var(--white); border: 1px solid var(--gray-rule); border-radius: var(--r); padding: 4px; margin-bottom: 14px; }
     .demo-mode-btn { background: none; border: none; padding: 7px 18px; font-family: var(--font-body); font-size: 12.5px; font-weight: 700; color: var(--gray-md); border-radius: 3px; cursor: pointer; transition: background 0.15s, color 0.15s; }
@@ -354,7 +358,7 @@
 </nav>
 
 <!-- HERO — blue panel + lab photography background -->
-<div class="hero">
+<div class="hero1">
   <div class="hero-bg"></div>
   <div class="hero-panel">
     <div class="tag">ChatSKU — AI Research Assistant Demo</div>
@@ -415,9 +419,18 @@
         </div>
 
         <div class="bs-q-list">
-          <button class="demo-try-btn" type="button" data-query="I have a His-tagged protein and I want to detect its interaction with a biotinylated ligand. Which BioSignal² beads should I use and in what configuration?">
-            <span class="demo-try-label">Researcher asks</span>
-            Which beads for a His-tagged protein + biotinylated ligand interaction?
+          <div class="bs-lang" role="group" aria-label="Question language">
+            <button type="button" class="bs-lang__btn is-active" data-lang="en" aria-pressed="true">English</button>
+            <button type="button" class="bs-lang__btn" data-lang="es" aria-pressed="false">Español</button>
+            <button type="button" class="bs-lang__btn" data-lang="fr" aria-pressed="false">Français</button>
+          </div>
+          <button id="bs-q1" class="demo-try-btn" type="button"
+            data-query-en="Which BioSignal² beads should I use and in what configuration?"
+            data-query-es="¿Qué perlas BioSignal² debo utilizar y en qué configuración?"
+            data-query-fr="Quelles billes BioSignal² dois-je utiliser et dans quelle configuration ?"
+            data-query="Which BioSignal² beads should I use and in what configuration?">
+            <span class="demo-try-label" data-en="Researcher asks" data-es="Un investigador pregunta" data-fr="Un chercheur demande">Researcher asks</span>
+            <span class="bs-q-text" data-en="Which BioSignal² beads should I use and in what configuration?" data-es="¿Qué perlas BioSignal² debo utilizar y en qué configuración?" data-fr="Quelles billes BioSignal² dois-je utiliser et dans quelle configuration ?">Which BioSignal² beads should I use and in what configuration?</span>
           </button>
           <button class="demo-try-btn" type="button" data-query="We want to measure human TNF-alpha in cell culture supernatant using EnLIGHT OMEGA. Do you have a ready-to-use kit? What's the detection range?">
             <span class="demo-try-label">Procurement scientist asks</span>
@@ -1029,10 +1042,30 @@
       });
     }
 
+    /* EN/ES/FR toggle for the first question only */
+    function setQ1Lang(lang){
+      var S = (lang === 'es' || lang === 'fr') ? lang : 'en';
+      var q1 = document.getElementById('bs-q1'); if(!q1) return;
+      q1.querySelectorAll('[data-en][data-es]').forEach(function(el){ el.textContent = el.dataset[S]; });
+      q1.dataset.query = q1.getAttribute('data-query-'+S);
+      document.querySelectorAll('.bs-lang__btn').forEach(function(b){
+        var on = b.dataset.lang===S;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-pressed', on?'true':'false');
+      });
+    }
+    function initQ1Lang(){
+      document.querySelectorAll('.bs-lang__btn').forEach(function(b){
+        b.addEventListener('click', function(){ setQ1Lang(b.dataset.lang); });
+      });
+      setQ1Lang('en');
+    }
+
     function init() {
       initTryItButtons();
       initModeToggle();
       initVoiceInput();
+      initQ1Lang();
       /* Snapshot body children BEFORE the widget loads, so we can clean up on reload */
       bodySnapshot = new Set(Array.from(document.body.children));
       loadWidget('chatsku-widget', activeMode, 'demo-widget-spinner');
