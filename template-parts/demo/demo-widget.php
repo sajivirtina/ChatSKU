@@ -74,6 +74,9 @@ if ( is_array( $questions ) ) {
 	}
 }
 
+// Image-search images (ACF gallery). When present, show the image-search box.
+$images = $f( 'demo_images', [] );
+
 $print_assets = empty( $GLOBALS['cdw_assets_printed'] );
 $GLOBALS['cdw_assets_printed'] = true;
 ?>
@@ -113,6 +116,12 @@ $GLOBALS['cdw_assets_printed'] = true;
 .cdw__spinner.is-hidden { display: none; }
 .cdw__spin { width: 36px; height: 36px; border: 3px solid rgba(0,201,177,0.2); border-top-color: var(--cdw-accent); border-radius: 50%; animation: cdw-spin .8s linear infinite; }
 @keyframes cdw-spin { to { transform: rotate(360deg); } }
+.cdw__imgsearch { background: var(--color-bg-secondary, #1e293b); border: 1px solid var(--color-border, rgba(255,255,255,0.08)); border-radius: 12px; padding: 20px 22px; margin-top: 16px; }
+.cdw__imgsearch-lead { font-size: 13px; font-weight: 700; color: var(--color-text-primary, #f8fafc); margin: 0 0 14px; }
+.cdw__img-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.cdw__img-btn { background: none; border: 1px solid var(--color-border, rgba(255,255,255,0.08)); border-radius: 10px; overflow: hidden; cursor: pointer; padding: 0; transition: border-color .2s, transform .2s; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; }
+.cdw__img-btn:hover { border-color: var(--cdw-accent); transform: scale(1.03); }
+.cdw__img-btn img { width: 100%; height: 100%; object-fit: cover; display: block; }
 @media (max-width: 900px) { .cdw__grid { grid-template-columns: 1fr; gap: 28px; } .cdw__right { position: static; } }
 </style>
 <?php endif; ?>
@@ -175,6 +184,24 @@ $GLOBALS['cdw_assets_printed'] = true;
 						</button>
 						<?php endforeach; ?>
 					</div>
+				<?php endif; ?>
+
+				<?php if ( $images && is_array( $images ) ) : ?>
+				<div class="cdw__imgsearch">
+					<p class="cdw__imgsearch-lead">Or click on any image to try image search</p>
+					<div class="cdw__img-grid">
+						<?php
+						foreach ( $images as $img ) :
+							$full  = is_array( $img ) ? ( $img['url'] ?? '' ) : '';
+							$thumb = is_array( $img ) ? ( $img['sizes']['medium'] ?? $full ) : $full;
+							if ( ! $full ) { continue; }
+						?>
+						<button class="cdw__img-btn" type="button" data-img="<?php echo esc_url( $full ); ?>" aria-label="Search by image">
+							<img src="<?php echo esc_url( $thumb ); ?>" alt="<?php echo esc_attr( is_array( $img ) ? ( $img['alt'] ?? '' ) : '' ); ?>" loading="lazy">
+						</button>
+						<?php endforeach; ?>
+					</div>
+				</div>
 				<?php endif; ?>
 			</div>
 
@@ -254,9 +281,37 @@ $GLOBALS['cdw_assets_printed'] = true;
 		input.focus();
 	}
 
+	// Fetch a demo image, drop it into the widget's file input, and fire change → image search.
+	function injectImageIntoWidget(imgUrl) {
+		var container = document.getElementById('chatsku-widget') || document;
+		fetch(imgUrl).then(function (res) { return res.blob(); }).then(function (blob) {
+			var filename = imgUrl.split('/').pop() || 'image.png';
+			var file = new File([blob], filename, { type: blob.type || 'image/png' });
+			var candidates = [container, document];
+			var iframes = container.querySelectorAll ? container.querySelectorAll('iframe') : [];
+			for (var i = 0; i < iframes.length; i++) {
+				try { candidates.push(iframes[i].contentDocument || iframes[i].contentWindow.document); } catch (e) {}
+			}
+			var fileInput = null;
+			for (var k = 0; k < candidates.length; k++) {
+				var el = candidates[k].querySelector ? candidates[k].querySelector('input[type="file"]') : null;
+				if (el) { fileInput = el; break; }
+			}
+			if (!fileInput) return;
+			var dt = new DataTransfer(); dt.items.add(file); fileInput.files = dt.files;
+			fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+			fileInput.dispatchEvent(new Event('input', { bubbles: true }));
+		}).catch(function (err) { console.warn('[ChatSKU Demo] Image fetch failed:', err); });
+	}
+
 	root.addEventListener('click', function (e) {
 		var btn = e.target.closest('.cdw-try'); if (!btn) return;
 		var q = btn.getAttribute('data-query'); if (q) injectTextIntoWidget(q);
+	});
+
+	root.addEventListener('click', function (e) {
+		var ib = e.target.closest('.cdw__img-btn'); if (!ib) return;
+		var u = ib.getAttribute('data-img'); if (u) injectImageIntoWidget(u);
 	});
 
 	root.querySelectorAll('.cdw-mic-btn').forEach(function (btn) {

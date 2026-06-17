@@ -77,6 +77,18 @@ acf_add_local_field_group( [
 			],
 		],
 
+		// ── Image search ─────────────────────────────────────────────────────
+		[ 'key' => 'field_demo_tab_imgsearch', 'type' => 'tab', 'label' => 'Image search' ],
+		[
+			'key'           => 'field_demo_images',
+			'label'         => 'Image-search images',
+			'name'          => 'demo_images',
+			'type'          => 'gallery',
+			'return_format' => 'array',
+			'preview_size'  => 'medium',
+			'instructions'  => 'Upload one or more product images. If any are added, an "Or click on any image to try image search" box appears in the demo, and clicking an image runs an image search in the widget. Leave empty to hide the feature.',
+		],
+
 		// ── Widget ───────────────────────────────────────────────────────────
 		[ 'key' => 'field_demo_tab_widget', 'type' => 'tab', 'label' => 'Widget' ],
 		[ 'key' => 'field_widget_api_key', 'label' => 'Widget API key', 'name' => 'widget_api_key', 'type' => 'text', 'required' => 1, 'instructions' => 'ChatSKU widget data-api-key for this project.' ],

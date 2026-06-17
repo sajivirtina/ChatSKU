@@ -12,3 +12,7 @@ License: Proprietary
 Text Domain: chatsku
 Tags: dark, saas, b2b, custom-menu, custom-logo, featured-images, threaded-comments
 */
+
+.demo-template-default main#main {
+    padding-top: 0;
+}

@@ -38,6 +38,9 @@ defined( 'ABSPATH' ) || exit;
 		.e-con.white-section { background-color: #ffffff !important; color: #111111; }
 		.elementor-section.white-section *,
 		.e-con.white-section * { color: inherit; }
+		.demo-template-default main#main {
+		padding-top: 0;
+	}
 	</style>
 </head>
 <body <?php body_class( 'demo-canvas' ); ?>>
