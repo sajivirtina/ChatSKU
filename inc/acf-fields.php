@@ -225,14 +225,66 @@ acf_add_local_field_group( [
         ],
         [ 'key' => 'field_b2b_image', 'label' => 'B2B Section Image / Screenshot', 'name' => 'b2b_image', 'type' => 'image', 'return_format' => 'array' ],
 
+        // ── Pricing ───────────────────────────────────────────────────────
+        [ 'key' => 'field_hp_tab', 'label' => 'Pricing', 'name' => '', 'type' => 'tab', 'placement' => 'left' ],
+        [ 'key' => 'field_hp_eyebrow', 'label' => 'Eyebrow', 'name' => 'pricing_eyebrow', 'type' => 'text', 'default_value' => 'Pricing' ],
+        [ 'key' => 'field_hp_heading', 'label' => 'Heading', 'name' => 'pricing_heading', 'type' => 'text', 'default_value' => 'Simple pricing that scales with your catalog' ],
+        [ 'key' => 'field_hp_intro', 'label' => 'Intro paragraph', 'name' => 'pricing_intro', 'type' => 'textarea', 'rows' => 3 ],
+        [ 'key' => 'field_hp_features', 'label' => 'Shared features (shown in every plan)', 'name' => 'pricing_features', 'type' => 'repeater', 'min' => 0, 'max' => 20, 'layout' => 'table', 'button_label' => 'Add feature',
+            'sub_fields' => [
+                [ 'key' => 'field_hp_feature_text', 'label' => 'Feature', 'name' => 'feature_text', 'type' => 'text' ],
+            ]
+        ],
+        [ 'key' => 'field_hp_plans', 'label' => 'Plans', 'name' => 'pricing_plans', 'type' => 'repeater', 'min' => 0, 'max' => 4, 'layout' => 'block', 'button_label' => 'Add plan',
+            'sub_fields' => [
+                [ 'key' => 'field_hp_plan_name', 'label' => 'Plan name', 'name' => 'plan_name', 'type' => 'text' ],
+                [ 'key' => 'field_hp_plan_tagline', 'label' => 'Tagline', 'name' => 'plan_tagline', 'type' => 'textarea', 'rows' => 2 ],
+                [ 'key' => 'field_hp_plan_price_label', 'label' => 'Price label', 'name' => 'plan_price_label', 'type' => 'text', 'instructions' => 'e.g. Free / Flat monthly / Custom' ],
+                [ 'key' => 'field_hp_plan_price_note', 'label' => 'Price note', 'name' => 'plan_price_note', 'type' => 'textarea', 'rows' => 2 ],
+                [ 'key' => 'field_hp_plan_featured', 'label' => 'Featured (highlight card)', 'name' => 'plan_featured', 'type' => 'true_false', 'ui' => 1 ],
+                [ 'key' => 'field_hp_plan_badge', 'label' => 'Badge text', 'name' => 'plan_badge', 'type' => 'text', 'instructions' => 'e.g. Most popular. Leave blank for none.' ],
+                [ 'key' => 'field_hp_plan_cta_text', 'label' => 'Button text', 'name' => 'plan_cta_text', 'type' => 'text' ],
+                [ 'key' => 'field_hp_plan_cta_url', 'label' => 'Button URL', 'name' => 'plan_cta_url', 'type' => 'text' ],
+            ]
+        ],
+        [ 'key' => 'field_hp_note_text', 'label' => 'Footnote text', 'name' => 'pricing_note_text', 'type' => 'text', 'default_value' => 'Not sure which plan fits?' ],
+        [ 'key' => 'field_hp_note_l1_text', 'label' => 'Footnote link 1 — text', 'name' => 'pricing_note_link1_text', 'type' => 'text' ],
+        [ 'key' => 'field_hp_note_l1_url', 'label' => 'Footnote link 1 — URL', 'name' => 'pricing_note_link1_url', 'type' => 'text' ],
+        [ 'key' => 'field_hp_note_l2_text', 'label' => 'Footnote link 2 — text', 'name' => 'pricing_note_link2_text', 'type' => 'text' ],
+        [ 'key' => 'field_hp_note_l2_url', 'label' => 'Footnote link 2 — URL', 'name' => 'pricing_note_link2_url', 'type' => 'text' ],
+
+        // ── Trust / Credibility ───────────────────────────────────────────
+        [ 'key' => 'field_ht_tab', 'label' => 'Trust / Credibility', 'name' => '', 'type' => 'tab', 'placement' => 'left' ],
+        [ 'key' => 'field_ht_eyebrow', 'label' => 'Eyebrow', 'name' => 'trust_eyebrow', 'type' => 'text', 'default_value' => 'Why suppliers trust ChatSKU' ],
+        [ 'key' => 'field_ht_heading', 'label' => 'Heading', 'name' => 'trust_heading', 'type' => 'text', 'default_value' => 'Backed by 14 years of B2B commerce experience' ],
+        [ 'key' => 'field_ht_intro', 'label' => 'Intro paragraph', 'name' => 'trust_intro', 'type' => 'textarea', 'rows' => 3 ],
+        [ 'key' => 'field_ht_stats', 'label' => 'Stats strip', 'name' => 'trust_stats', 'type' => 'repeater', 'min' => 0, 'max' => 4, 'layout' => 'table', 'button_label' => 'Add stat',
+            'sub_fields' => [
+                [ 'key' => 'field_ht_stat_value', 'label' => 'Value', 'name' => 'stat_value', 'type' => 'text' ],
+                [ 'key' => 'field_ht_stat_label', 'label' => 'Label', 'name' => 'stat_label', 'type' => 'text' ],
+            ]
+        ],
+        [ 'key' => 'field_ht_cards', 'label' => 'Cards', 'name' => 'trust_cards', 'type' => 'repeater', 'min' => 0, 'max' => 6, 'layout' => 'block', 'button_label' => 'Add card',
+            'sub_fields' => [
+                [ 'key' => 'field_ht_card_title', 'label' => 'Title', 'name' => 'card_title', 'type' => 'text' ],
+                [ 'key' => 'field_ht_card_body', 'label' => 'Body', 'name' => 'card_body', 'type' => 'textarea', 'rows' => 3 ],
+            ]
+        ],
+
         // ── Bottom CTA ────────────────────────────────────────────────────
         [ 'key' => 'field_cta_tab', 'label' => 'Bottom CTA', 'name' => '', 'type' => 'tab', 'placement' => 'left' ],
-        [ 'key' => 'field_cta_heading',           'label' => 'CTA Heading',           'name' => 'cta_heading',           'type' => 'text' ],
-        [ 'key' => 'field_cta_subheading',        'label' => 'CTA Subheading',        'name' => 'cta_subheading',        'type' => 'textarea', 'rows' => 2 ],
-        [ 'key' => 'field_cta_primary_text',      'label' => 'Primary Button Text',   'name' => 'cta_primary_text',      'type' => 'text', 'default_value' => 'Start Free — No Credit Card' ],
-        [ 'key' => 'field_cta_primary_url',       'label' => 'Primary Button URL',    'name' => 'cta_primary_url',       'type' => 'url' ],
-        [ 'key' => 'field_cta_secondary_text',    'label' => 'Secondary Button Text', 'name' => 'cta_secondary_text',    'type' => 'text', 'default_value' => 'See Live Demo' ],
-        [ 'key' => 'field_cta_secondary_url',     'label' => 'Secondary Button URL',  'name' => 'cta_secondary_url',     'type' => 'url' ],
+        [ 'key' => 'field_cta_heading',    'label' => 'CTA Heading',    'name' => 'cta_heading',    'type' => 'text' ],
+        [ 'key' => 'field_cta_subheading', 'label' => 'CTA Subheading', 'name' => 'cta_subheading', 'type' => 'textarea', 'rows' => 2 ],
+        [ 'key' => 'field_cta_card1_eyebrow',  'label' => 'Card 1 — Eyebrow',     'name' => 'cta_card1_eyebrow',  'type' => 'text', 'default_value' => 'Ready to go' ],
+        [ 'key' => 'field_cta_card1_title',    'label' => 'Card 1 — Title',       'name' => 'cta_card1_title',    'type' => 'text' ],
+        [ 'key' => 'field_cta_card1_body',     'label' => 'Card 1 — Body',        'name' => 'cta_card1_body',     'type' => 'textarea', 'rows' => 3 ],
+        [ 'key' => 'field_cta_card1_btn_text', 'label' => 'Card 1 — Button text', 'name' => 'cta_card1_btn_text', 'type' => 'text', 'default_value' => 'Start Free — No Credit Card' ],
+        [ 'key' => 'field_cta_card1_btn_url',  'label' => 'Card 1 — Button URL',  'name' => 'cta_card1_btn_url',  'type' => 'text' ],
+        [ 'key' => 'field_cta_card2_eyebrow',  'label' => 'Card 2 — Eyebrow',     'name' => 'cta_card2_eyebrow',  'type' => 'text', 'default_value' => 'Want to see it first' ],
+        [ 'key' => 'field_cta_card2_title',    'label' => 'Card 2 — Title',       'name' => 'cta_card2_title',    'type' => 'text' ],
+        [ 'key' => 'field_cta_card2_body',     'label' => 'Card 2 — Body',        'name' => 'cta_card2_body',     'type' => 'textarea', 'rows' => 3 ],
+        [ 'key' => 'field_cta_card2_btn_text', 'label' => 'Card 2 — Button text', 'name' => 'cta_card2_btn_text', 'type' => 'text', 'default_value' => 'See Live Demo' ],
+        [ 'key' => 'field_cta_card2_btn_url',  'label' => 'Card 2 — Button URL',  'name' => 'cta_card2_btn_url',  'type' => 'text' ],
     ],
     'location' => [
         [ [ 'param' => 'page_type', 'operator' => '==', 'value' => 'front_page' ] ],

@@ -38,13 +38,43 @@ $b2b_props              = chatsku_field( 'b2b_props',      false, [] );
 $power_heading          = chatsku_field( 'power_heading',    false, 'Your customers. Your pricing. <em>Your rules.</em>' );
 $power_subheading       = chatsku_field( 'power_subheading', false, 'Import your existing customer list, organize them into groups, and set custom pricing — all from your dashboard.' );
 
-// ── Bottom CTA ────────────────────────────────────────────────────────────────
-$cta_heading            = chatsku_field( 'cta_heading',        false, 'Ready to make your catalog <em>talk back?</em>' );
-$cta_subheading         = chatsku_field( 'cta_subheading',     false, 'Start free. No credit card required. Most teams go live in under 4 hours.' );
-$cta_primary_text       = chatsku_field( 'cta_primary_text',   false, 'Start Free — No Card Needed' );
-$cta_primary_url        = chatsku_field( 'cta_primary_url',    false, chatsku_option( 'register_url', '/signup/' ) );
-$cta_secondary_text     = chatsku_field( 'cta_secondary_text', false, 'See Live Demo' );
-$cta_secondary_url      = chatsku_field( 'cta_secondary_url',  false, '/demo-widget/' );
+// ── Pricing / Trust / CTA ─────────────────────────────────────────────────────
+// Defaults (mockup copy) live in the partials; pass ACF values, null = use partial default.
+$pricing = [
+    'eyebrow'         => chatsku_field( 'pricing_eyebrow',         false, null ),
+    'heading'         => chatsku_field( 'pricing_heading',         false, null ),
+    'intro'           => chatsku_field( 'pricing_intro',           false, null ),
+    'features'        => chatsku_field( 'pricing_features',        false, [] ),
+    'plans'           => chatsku_field( 'pricing_plans',           false, [] ),
+    'note_text'       => chatsku_field( 'pricing_note_text',       false, null ),
+    'note_link1_text' => chatsku_field( 'pricing_note_link1_text', false, null ),
+    'note_link1_url'  => chatsku_field( 'pricing_note_link1_url',  false, null ),
+    'note_link2_text' => chatsku_field( 'pricing_note_link2_text', false, null ),
+    'note_link2_url'  => chatsku_field( 'pricing_note_link2_url',  false, null ),
+];
+
+$trust = [
+    'eyebrow' => chatsku_field( 'trust_eyebrow', false, null ),
+    'heading' => chatsku_field( 'trust_heading', false, null ),
+    'intro'   => chatsku_field( 'trust_intro',   false, null ),
+    'stats'   => chatsku_field( 'trust_stats',   false, [] ),
+    'cards'   => chatsku_field( 'trust_cards',   false, [] ),
+];
+
+$cta = [
+    'heading'        => chatsku_field( 'cta_heading',        false, null ),
+    'sub'            => chatsku_field( 'cta_subheading',     false, null ),
+    'card1_eyebrow'  => chatsku_field( 'cta_card1_eyebrow',  false, null ),
+    'card1_title'    => chatsku_field( 'cta_card1_title',    false, null ),
+    'card1_body'     => chatsku_field( 'cta_card1_body',     false, null ),
+    'card1_btn_text' => chatsku_field( 'cta_card1_btn_text', false, null ),
+    'card1_btn_url'  => chatsku_field( 'cta_card1_btn_url',  false, null ),
+    'card2_eyebrow'  => chatsku_field( 'cta_card2_eyebrow',  false, null ),
+    'card2_title'    => chatsku_field( 'cta_card2_title',    false, null ),
+    'card2_body'     => chatsku_field( 'cta_card2_body',     false, null ),
+    'card2_btn_text' => chatsku_field( 'cta_card2_btn_text', false, null ),
+    'card2_btn_url'  => chatsku_field( 'cta_card2_btn_url',  false, null ),
+];
 ?>
 
 <main id="main" class="chatsku-main home-main">
@@ -77,6 +107,12 @@ $cta_secondary_url      = chatsku_field( 'cta_secondary_url',  false, '/demo-wid
     <!-- ═══ 3. THE SOLUTION ═══════════════════════════════════════════════════ -->
     <?php get_template_part( 'template-parts/home/solution' ); ?>
 
+    <!-- ═══ PRICING ══════════════════════════════════════════════════════════ -->
+    <?php
+    set_query_var( 'chatsku_pricing', $pricing );
+    get_template_part( 'template-parts/home/pricing' );
+    ?>
+
     <!-- ═══ 4. HOW IT WORKS — 3 STEPS ════════════════════════════════════════ -->
     <?php
     set_query_var( 'chatsku_steps', [
@@ -107,16 +143,15 @@ $cta_secondary_url      = chatsku_field( 'cta_secondary_url',  false, '/demo-wid
     get_template_part( 'template-parts/home/power-feature' );
     ?>
 
-    <!-- ═══ 7. BOTTOM CTA ════════════════════════════════════════════════════ -->
+    <!-- ═══ TRUST / CREDIBILITY ══════════════════════════════════════════════ -->
     <?php
-    set_query_var( 'chatsku_cta', [
-        'heading'        => $cta_heading,
-        'subheading'     => $cta_subheading,
-        'primary_text'   => $cta_primary_text,
-        'primary_url'    => $cta_primary_url,
-        'secondary_text' => $cta_secondary_text,
-        'secondary_url'  => $cta_secondary_url,
-    ] );
+    set_query_var( 'chatsku_trust', $trust );
+    get_template_part( 'template-parts/home/trust' );
+    ?>
+
+    <!-- ═══ BOTTOM CTA ═══════════════════════════════════════════════════════ -->
+    <?php
+    set_query_var( 'chatsku_cta', $cta );
     get_template_part( 'template-parts/home/home-cta' );
     ?>
 
