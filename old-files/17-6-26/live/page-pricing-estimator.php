@@ -1,0 +1,410 @@
+<?php
+/**
+ * Template Name: Pricing Estimator — Embed
+ *
+ * Canvas (no header/footer) — served as the iframe src inside the Revenue Calculator
+ * modal. Contains the full ChatSKU SKUBit pricing estimator UI.
+ *
+ * Based on: chatsku-pricing-estimator.html
+ *
+ * @package ChatSKU
+ */
+?><!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+<head>
+<meta charset="<?php bloginfo( 'charset' ); ?>">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ChatSKU Pricing Estimator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<?php wp_head(); ?>
+<style>
+:root{
+  --navy-900:#07182E; --navy-800:#0B2545; --navy-700:#103257;
+  --amber:#F4B324; --amber-soft:#FFC94D; --green:#7BD389; --coral:#FF6B5A; --teal:#00C9B1;
+  --ink:#F2F4F8; --slate:#9FC0E8; --muted:#7E99BC;
+  --line:rgba(159,192,232,.16);
+  --sans:'Archivo',system-ui,sans-serif; --mono:'IBM Plex Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{overflow-x:hidden;}
+body{font-family:var(--sans);color:var(--ink);
+  background:radial-gradient(140% 120% at 15% 0%, #103257 0%, #0B2545 45%, #06121F 100%);
+  background-attachment:fixed;min-height:100vh;line-height:1.45;padding:38px 22px 60px;}
+.wrap{max-width:1080px;margin:0 auto;}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:5px;color:var(--amber);text-transform:uppercase;font-weight:600;}
+h1{font-size:clamp(30px,5vw,50px);font-weight:800;letter-spacing:-1.2px;line-height:1.02;margin:12px 0 10px;}
+h1 .yel{color:var(--amber);}
+.sub{color:var(--slate);max-width:620px;font-size:16px;}
+.brand{float:right;font-family:var(--mono);font-size:12px;letter-spacing:2px;color:var(--muted);border:1px solid var(--line);padding:7px 12px;border-radius:8px;}
+.panel{position:relative;background:rgba(11,37,69,.55);border:1px solid var(--line);border-radius:16px;backdrop-filter:blur(4px);}
+.body{display:grid;grid-template-columns:1.12fr 1fr;gap:18px;margin-top:30px;align-items:start;}
+.pad{padding:22px 24px;}
+
+/* tabs */
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:20px;flex-wrap:wrap;}
+.tab{background:none;border:none;color:var(--muted);font-family:var(--sans);font-weight:600;font-size:14px;padding:10px 12px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:6px;}
+.tab:hover{color:var(--slate);}
+.tab.on{color:var(--amber);border-bottom-color:var(--amber);}
+.tab .dot{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.6;}
+.panel-tab{display:none;}
+.panel-tab.on{display:block;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+.ig{margin-bottom:0;}
+.ig label{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--ink);margin-bottom:6px;}
+.ig label .badge{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:2px 6px;border-radius:4px;border:1px solid var(--line);color:var(--muted);cursor:pointer;}
+.ig label .badge.auto{color:var(--teal);border-color:rgba(0,201,177,.4);}
+.ig label .badge.manual{color:var(--amber);border-color:rgba(244,179,36,.4);}
+.row{display:flex;align-items:center;gap:8px;background:var(--navy-900);border:1px solid var(--line);border-radius:10px;padding:9px 12px;}
+.row input{flex:1;background:none;border:none;outline:none;color:var(--ink);font-family:var(--mono);font-size:17px;font-weight:600;width:100%;}
+.row input:read-only{color:var(--slate);}
+.row .u{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.tabnote{font-size:12px;color:var(--muted);margin-top:14px;line-height:1.5;}
+
+/* stats strip */
+.strip{margin-top:18px;border:1px solid var(--line);border-radius:12px;background:rgba(7,24,46,.55);padding:14px 16px;}
+.strip-h{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--amber);text-transform:uppercase;margin-bottom:11px;}
+.strip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 10px;}
+.stat .sl{font-size:10.5px;color:var(--muted);font-family:var(--mono);}
+.stat .sv{font-weight:800;font-size:18px;margin-top:2px;letter-spacing:-.3px;}
+
+/* result */
+.rec{padding:24px 26px;}
+.rec.sales{border-color:var(--coral);box-shadow:0 0 0 1px var(--coral);}
+.rec-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;border-bottom:1px solid var(--line);padding-bottom:18px;}
+.rec-plan-label{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;}
+.rec-plan{font-size:25px;font-weight:800;margin-top:4px;}
+.rec-price{text-align:right;}
+.rec-price .m{font-family:var(--mono);font-weight:700;font-size:38px;color:var(--amber);letter-spacing:-2px;line-height:1;}
+.rec-price .m small{font-size:15px;color:var(--slate);font-weight:500;letter-spacing:0;}
+.rec-price .setup{font-family:var(--mono);font-size:12px;color:var(--slate);margin-top:7px;}
+.metarow{display:flex;gap:20px;flex-wrap:wrap;margin-top:16px;}
+.meta .ml{font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;}
+.meta .mv{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--ink);margin-top:3px;}
+.curve{margin-top:18px;}
+.curve-h{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--slate);text-transform:uppercase;margin-bottom:9px;}
+.curve-track{position:relative;height:10px;border-radius:5px;background:linear-gradient(90deg,rgba(244,179,36,.25),rgba(244,179,36,.6));}
+.curve-dot{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:var(--amber);border:3px solid var(--navy-900);box-shadow:0 0 0 1px var(--amber);transform:translate(-50%,-50%);transition:left .35s;}
+.curve-base{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:10px;line-height:1.5;}
+.bars{margin-top:18px;}
+.bars-h{font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--slate);text-transform:uppercase;margin-bottom:9px;}
+.bar-row{display:grid;grid-template-columns:108px 1fr 84px;gap:9px;align-items:center;margin-bottom:7px;}
+.bar-row .bl{font-size:12px;color:var(--slate);}
+.bar-track{height:9px;border-radius:5px;background:rgba(159,192,232,.14);overflow:hidden;}
+.bar-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--amber),var(--amber-soft));transition:width .4s;}
+.bar-val{font-family:var(--mono);font-size:12px;text-align:right;color:var(--ink);}
+.sales-note{margin-top:16px;padding:13px 15px;background:rgba(255,107,90,.1);border-left:3px solid var(--coral);border-radius:8px;font-size:13px;color:var(--ink);display:none;}
+.rec.sales .sales-note{display:block;}
+.foot{margin-top:24px;font-family:var(--mono);font-size:11.5px;color:var(--muted);line-height:1.7;}
+.foot b{color:var(--slate);}
+@media(max-width:860px){.body{grid-template-columns:1fr;}.brand{display:none;}.strip-grid{grid-template-columns:repeat(2,1fr);}}
+
+.ig[data-metric] label{position:relative;}
+.ig.is-auto .row{border-color:rgba(0,201,177,.45);}
+.ig.is-manual .row{border-color:rgba(244,179,36,.5);}
+.tip{display:none;pointer-events:none;position:absolute;z-index:50;top:24px;right:0;width:242px;background:var(--navy-900);border:1px solid var(--teal);border-radius:9px;padding:10px 12px;font-family:var(--sans);font-weight:400;font-size:12px;line-height:1.5;color:var(--slate);text-transform:none;letter-spacing:0;box-shadow:0 14px 34px -12px rgba(0,0,0,.7);}
+.ig.is-manual .tip{border-color:var(--amber);}
+.ig[data-metric]:hover .tip{display:block;}
+.ig[data-metric]:focus-within .tip{display:none !important;}
+.tip b{color:var(--ink);}
+
+.profit{display:none;margin-top:18px;padding:15px 17px;border:1px dashed var(--coral);border-radius:11px;background:rgba(255,107,90,.07);}
+.rec.profit-on .profit{display:block;}
+.profit-h{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--coral);text-transform:uppercase;margin-bottom:12px;}
+.profit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 10px;}
+.pstat .pl{font-family:var(--mono);font-size:9.5px;letter-spacing:.5px;color:var(--muted);text-transform:uppercase;}
+.pstat .pv{font-family:var(--mono);font-weight:700;font-size:17px;margin-top:3px;color:var(--ink);}
+.pstat .pv.green{color:var(--green);}
+.profit-note{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:12px;line-height:1.5;}
+.kicker{cursor:default;}
+
+.lctl{display:flex;align-items:center;gap:7px;}
+.tgl{position:relative;width:30px;height:16px;border-radius:9px;border:none;background:rgba(159,192,232,.28);cursor:pointer;padding:0;transition:.15s;flex:none;}
+.tgl::after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#cdd9ea;transition:.15s;}
+.tgl.on{background:var(--teal);}
+.tgl.on::after{left:16px;background:#fff;}
+.ig.is-off .row{opacity:.45;}
+.ig.is-off .badge{opacity:.4;pointer-events:none;}
+
+@media(max-width:560px){
+  .grid2{grid-template-columns:1fr;}
+  .profit-grid{grid-template-columns:1fr 1fr;}
+  .bar-row{grid-template-columns:78px 1fr 68px;gap:7px;}
+  h1{font-size:25px;}
+  .pad{padding:20px 16px;}
+  .sub{font-size:14px;}
+}
+</style>
+</head>
+<body <?php body_class( 'chatsku-pricing-estimator-embed' ); ?>>
+<?php wp_body_open(); ?>
+
+<div class="wrap">
+  <div class="brand">CHATSKU &middot; PRICING</div>
+  <div class="kicker">Usage-Based Pricing &middot; Continuous Curve</div>
+  <h1>Estimate Your <span class="yel">Monthly Cost</span></h1>
+  <p class="sub">Enter your catalog and traffic details. Usage, monthly fee, and one-time setup update in real time, with no tiers.</p>
+
+  <div class="body">
+    <!-- INPUTS -->
+    <div class="panel pad">
+      <div class="tabs" id="tabs">
+        <button class="tab on" data-tab="catalog"><span class="dot"></span>Catalog</button>
+        <button class="tab" data-tab="traffic"><span class="dot"></span>Traffic</button>
+        <button class="tab" data-tab="commerce"><span class="dot"></span>Commerce</button>
+        <button class="tab" data-tab="syncs"><span class="dot"></span>Syncs</button>
+        <button class="tab" data-tab="premium"><span class="dot"></span>Premium</button>
+      </div>
+
+      <!-- Catalog -->
+      <div class="panel-tab on" data-panel="catalog">
+        <div class="grid2">
+          <div class="ig"><label>Catalog Pages</label><div class="row"><input id="pages" type="text" inputmode="numeric"><span class="u">pages</span></div></div>
+          <div class="ig"><label># of Products</label><div class="row"><input id="products" type="text" inputmode="numeric"><span class="u">products</span></div></div>
+          <div class="ig"><label>Images per Product</label><div class="row"><input id="images" type="text" inputmode="numeric"><span class="u">imgs</span></div></div>
+          <div class="ig"><label>Avg Variants</label><div class="row"><input id="variants" type="text" inputmode="numeric"><span class="u">variants</span></div></div>
+        </div>
+        <div class="tabnote">Your catalog drives the rest. Visitors, searches, and syncs are estimated from these four numbers and can each be overridden in their tab.</div>
+      </div>
+
+      <!-- Traffic -->
+      <div class="panel-tab" data-panel="traffic">
+        <div class="grid2">
+          <div class="ig" data-metric="visitors"><label>Chatbot Visitors/mo <span class="badge auto">Auto</span><span class="tip"></span></label><div class="row"><input type="text" inputmode="numeric" readonly><span class="u">/mo</span></div></div>
+        </div>
+        <div class="tabnote">Estimated from catalog size: products x 1.5 + pages x 1.0. Tap Auto to override.</div>
+      </div>
+
+      <!-- Commerce -->
+      <div class="panel-tab" data-panel="commerce">
+        <div class="grid2">
+          <div class="ig" data-metric="quotes"><label>Quotes/mo <span class="lctl"><button type="button" class="tgl on" aria-label="enable or disable"></button><span class="badge auto">Auto</span></span><span class="tip"></span></label><div class="row"><input type="text" inputmode="numeric" readonly><span class="u">/mo</span></div></div>
+          <div class="ig" data-metric="orders"><label>Orders/mo <span class="lctl"><button type="button" class="tgl on" aria-label="enable or disable"></button><span class="badge auto">Auto</span></span><span class="tip"></span></label><div class="row"><input type="text" inputmode="numeric" readonly><span class="u">/mo</span></div></div>
+        </div>
+        <div class="tabnote">Quotes are 28.6% of visitors. Orders are 50% of quotes. Orders consume SKUBits; quotes are base-covered.</div>
+      </div>
+
+      <!-- Syncs -->
+      <div class="panel-tab" data-panel="syncs">
+        <div class="grid2">
+          <div class="ig" data-metric="osync"><label>Order Syncs/mo <span class="lctl"><button type="button" class="tgl on" aria-label="enable or disable"></button><span class="badge auto">Auto</span></span><span class="tip"></span></label><div class="row"><input type="text" inputmode="numeric" readonly><span class="u">/mo</span></div></div>
+          <div class="ig" data-metric="qsync"><label>Quote Syncs/mo <span class="lctl"><button type="button" class="tgl on" aria-label="enable or disable"></button><span class="badge auto">Auto</span></span><span class="tip"></span></label><div class="row"><input type="text" inputmode="numeric" readonly><span class="u">/mo</span></div></div>
+        </div>
+        <div class="tabnote">Scaled to catalog SKUs (products x variants): order syncs at 7.5 each, quote syncs at 15 each.</div>
+      </div>
+
+      <!-- Premium -->
+      <div class="panel-tab" data-panel="premium">
+        <div class="grid2">
+          <div class="ig" data-metric="image"><label>Image Searches/mo <span class="lctl"><button type="button" class="tgl on" aria-label="enable or disable"></button><span class="badge auto">Auto</span></span><span class="tip"></span></label><div class="row"><input type="text" inputmode="numeric" readonly><span class="u">/mo</span></div></div>
+          <div class="ig" data-metric="voice"><label>Voice Searches/mo <span class="lctl"><button type="button" class="tgl on" aria-label="enable or disable"></button><span class="badge auto">Auto</span></span><span class="tip"></span></label><div class="row"><input type="text" inputmode="numeric" readonly><span class="u">/mo</span></div></div>
+        </div>
+        <div class="tabnote">Image searches scale with visitors and images per product. Voice scales with visitors.</div>
+      </div>
+
+      <!-- Stats strip -->
+      <div class="strip">
+        <div class="strip-h">Auto-Calculated Usage</div>
+        <div class="strip-grid">
+          <div class="stat"><div class="sl">Chatbot Visitors</div><div class="sv" id="s-visitors">0</div></div>
+          <div class="stat"><div class="sl">Quotes/mo</div><div class="sv" id="s-quotes">0</div></div>
+          <div class="stat"><div class="sl">Orders/mo</div><div class="sv" id="s-orders">0</div></div>
+          <div class="stat"><div class="sl">Image Searches</div><div class="sv" id="s-image">0</div></div>
+          <div class="stat"><div class="sl">Voice Searches</div><div class="sv" id="s-voice">0</div></div>
+          <div class="stat"><div class="sl">Order Syncs</div><div class="sv" id="s-osync">0</div></div>
+          <div class="stat"><div class="sl">Quote Syncs</div><div class="sv" id="s-qsync">0</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULT -->
+    <div class="panel rec" id="rec">
+      <div class="rec-top">
+        <div><div class="rec-plan-label">Your Estimate</div><div class="rec-plan" id="recName">Your Plan</div></div>
+        <div class="rec-price"><div class="m" id="recM">$629<small>/mo</small></div><div class="setup" id="recSetup">+ $4,000 setup</div></div>
+      </div>
+      <div class="metarow">
+        <div class="meta"><div class="ml">Usage</div><div class="mv" id="mUsage">1.2M SKUBits</div></div>
+        <div class="meta"><div class="ml">SKUBit Price</div><div class="mv" id="mMarg">$0.0005</div></div>
+        <div class="meta"><div class="ml" id="mOverLbl">Overage / SKUBit</div><div class="mv" id="mOver">$0.0007</div></div>
+      </div>
+      <div class="curve">
+        <div class="curve-h"><span>Where you land</span><span>$299 &rarr; $1,149</span></div>
+        <div class="curve-track"><div class="curve-dot" id="curveDot"></div></div>
+      </div>
+      <div class="bars">
+        <div class="bars-h">SKUBit Consumption</div>
+        <div class="bar-row"><span class="bl">Image Search</span><div class="bar-track"><div class="bar-fill" id="b-image"></div></div><span class="bar-val" id="v-image">0</span></div>
+        <div class="bar-row"><span class="bl">Voice</span><div class="bar-track"><div class="bar-fill" id="b-voice"></div></div><span class="bar-val" id="v-voice">0</span></div>
+        <div class="bar-row"><span class="bl">Order Conversion</span><div class="bar-track"><div class="bar-fill" id="b-orders"></div></div><span class="bar-val" id="v-orders">0</span></div>
+        <div class="bar-row"><span class="bl">Order Sync</span><div class="bar-track"><div class="bar-fill" id="b-osync"></div></div><span class="bar-val" id="v-osync">0</span></div>
+        <div class="bar-row"><span class="bl">Quote Sync</span><div class="bar-track"><div class="bar-fill" id="b-qsync"></div></div><span class="bar-val" id="v-qsync">0</span></div>
+      </div>
+      <div class="profit" id="profit">
+        <div class="profit-h">Internal &middot; Profit View</div>
+        <div class="profit-grid">
+          <div class="pstat"><div class="pl">Monthly Revenue</div><div class="pv" id="pRev">$629</div></div>
+          <div class="pstat"><div class="pl">Monthly Cost</div><div class="pv" id="pCost">$120</div></div>
+          <div class="pstat"><div class="pl">Gross Profit</div><div class="pv green" id="pProfit">$509</div></div>
+          <div class="pstat"><div class="pl">Gross Margin</div><div class="pv" id="pMargin">81%</div></div>
+          <div class="pstat"><div class="pl">Blended Markup</div><div class="pv" id="pMark">5.2x</div></div>
+          <div class="pstat"><div class="pl">Setup (1x)</div><div class="pv" id="pSetup">$4,000</div></div>
+        </div>
+        <div class="profit-note">Cost basis $0.0001/SKUBit. SKUBit value of usage shown as cost. Setup is near-100% margin. Visible only to you. Alt+P or triple-click the header to hide.</div>
+      </div>
+      <div class="sales-note" id="salesNote"><b>Usage above the self-serve ceiling.</b> Volume pricing is custom at this scale. The figure shown is a starting estimate. Contact our Sales team for a tailored quote.</div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <b>Inputs to usage.</b> Catalog size estimates visitors; visitors and catalog estimate searches, quotes, orders, and syncs. Any value can be overridden. <b>Usage to price.</b> The five billable metrics convert to SKUBits (image 150, voice 10, order conversion 200, order sync 10, quote sync 10).
+  </div>
+</div>
+
+<script>
+const ANCHOR=0.0001;
+const BASE=299, INCLUDED=375000, MARGINAL=0.0004, CEILING=2500000, OVER=0.0006;
+const CEIL_MONTHLY=BASE+(CEILING-INCLUDED)*MARGINAL;
+const SK={image:150, voice:10, orders:200, osync:10, qsync:10};
+const ASSUMP={
+  visitors:'Products x 1.5 + pages x 1.0.',
+  quotes:'28.6% of chatbot visitors.',
+  orders:'50% of quotes.',
+  image:'Visitors x images per product x 0.8.',
+  voice:'Visitors x 4 searches.',
+  osync:'Catalog SKUs (products x variants) x 7.5.',
+  qsync:'Catalog SKUs (products x variants) x 15.'
+};
+
+let cat={pages:1000, products:500, images:3, variants:4};
+let ov={visitors:null, quotes:null, orders:null, image:null, voice:null, osync:null, qsync:null};
+let off={quotes:false, orders:false, osync:false, qsync:false, image:false, voice:false};
+
+const pn=s=>parseInt((s||'').toString().replace(/[^0-9]/g,''))||0;
+const cm=v=>Math.round(v).toLocaleString('en-US');
+const money=v=>'$'+Math.round(v).toLocaleString('en-US');
+const skM=v=>v>=1e6?(v/1e6).toFixed(2).replace(/\.?0+$/,'')+'M':v>=1e3?Math.round(v/1e3)+'K':Math.round(v);
+function setup(m){ if(m<=326) return 2500; return Math.ceil((4*m+1196)/1000)*1000; }
+
+function derive(){
+  const visitors = Math.round(cat.products*1.5 + cat.pages*1.0);
+  const quotes   = Math.round(visitors*0.2857);
+  const orders   = Math.round(quotes*0.50);
+  const image    = Math.round(visitors*cat.images*0.8);
+  const voice    = Math.round(visitors*4.0);
+  const skus     = cat.products*cat.variants;
+  const osync    = Math.round(skus*7.5);
+  const qsync    = Math.round(skus*15);
+  return {visitors,quotes,orders,image,voice,osync,qsync};
+}
+function metrics(){
+  const d=derive();
+  const m={};
+  for(const k in d) m[k] = off[k] ? 0 : (ov[k]!==null ? ov[k] : d[k]);
+  return m;
+}
+function price(total){
+  let monthly, over=false;
+  if(total<=INCLUDED) monthly=BASE;
+  else if(total<=CEILING) monthly=BASE+(total-INCLUDED)*MARGINAL;
+  else { over=true; monthly=CEIL_MONTHLY+(total-CEILING)*OVER; }
+  return {monthly,over};
+}
+
+function render(){
+  const m=metrics();
+  for(const k of ['visitors','quotes','orders','image','voice','osync','qsync'])
+    document.getElementById('s-'+k).textContent=cm(m[k]);
+  document.querySelectorAll('.ig[data-metric]').forEach(ig=>{
+    const k=ig.dataset.metric, inp=ig.querySelector('input'), badge=ig.querySelector('.badge'), tip=ig.querySelector('.tip'), tgl=ig.querySelector('.tgl');
+    const isOff = off.hasOwnProperty(k) && off[k];
+    if(document.activeElement!==inp) inp.value=cm(m[k]);
+    const manual = ov[k]!==null && !isOff;
+    inp.readOnly = isOff || !manual;
+    badge.textContent=manual?'Manual':'Auto';
+    badge.className='badge '+(manual?'manual':'auto');
+    ig.classList.toggle('is-manual', manual);
+    ig.classList.toggle('is-auto', !manual && !isOff);
+    ig.classList.toggle('is-off', isOff);
+    if(tgl) tgl.classList.toggle('on', !isOff);
+    if(tip) tip.innerHTML = isOff
+      ? 'Turned off. Toggle on to restore the default value.'
+      : (manual
+        ? 'Click on Manual to switch to auto-calculated default values.'
+        : '<b>Auto-calculated.</b> '+ASSUMP[k]+' Click on Auto to edit.');
+  });
+  const bits={image:m.image*SK.image, voice:m.voice*SK.voice, orders:m.orders*SK.orders, osync:m.osync*SK.osync, qsync:m.qsync*SK.qsync};
+  const total=bits.image+bits.voice+bits.orders+bits.osync+bits.qsync;
+  const p=price(total);
+  const markup= total>0 ? p.monthly/(total*ANCHOR) : 0;
+  try{ window.parent.postMessage({type:'chatsku-price', monthly:p.monthly, setup:setup(p.monthly), over:p.over}, '*'); }catch(e){}
+
+  document.getElementById('rec').classList.toggle('sales', p.over);
+  document.getElementById('recName').textContent = p.over ? 'Custom' : 'Your Plan';
+  document.getElementById('recM').innerHTML = p.over ? 'Custom<small></small>' : money(p.monthly)+'<small>/mo</small>';
+  document.getElementById('recSetup').textContent = p.over ? 'from '+money(p.monthly)+'/mo + custom setup' : '+ '+money(setup(p.monthly))+' setup';
+  document.getElementById('mUsage').textContent=skM(total)+' SKUBits';
+  const curPrice = total>0 ? p.monthly/total : 0;
+  document.getElementById('mMarg').textContent='$'+curPrice.toFixed(4);
+  document.getElementById('mOver').textContent='$'+(curPrice+2*ANCHOR).toFixed(4);
+  document.getElementById('mOverLbl').textContent='Overage above '+skM(total)+' / SKUBit';
+  const cost=total*ANCHOR, mo=p.monthly;
+  document.getElementById('pRev').textContent= p.over ? 'custom' : money(mo);
+  document.getElementById('pCost').textContent=money(cost);
+  document.getElementById('pProfit').textContent= p.over ? 'custom' : money(mo-cost);
+  document.getElementById('pMargin').textContent= (mo>0 && !p.over) ? Math.round((mo-cost)/mo*100)+'%' : '—';
+  document.getElementById('pMark').textContent=(markup?markup.toFixed(1):'0')+'x';
+  document.getElementById('pSetup').textContent= p.over ? 'custom' : money(setup(mo));
+  const pct=Math.max(0,Math.min(100,(p.monthly-BASE)/(CEIL_MONTHLY-BASE)*100));
+  document.getElementById('curveDot').style.left=pct+'%';
+  const max=Math.max(bits.image,bits.voice,bits.orders,bits.osync,bits.qsync,1);
+  for(const k of ['image','voice','orders','osync','qsync']){
+    document.getElementById('b-'+k).style.width=(bits[k]/max*100)+'%';
+    document.getElementById('v-'+k).textContent=cm(bits[k]);
+  }
+}
+
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.panel-tab').forEach(x=>x.classList.remove('on'));
+  t.classList.add('on');
+  document.querySelector('.panel-tab[data-panel="'+t.dataset.tab+'"]').classList.add('on');
+}));
+
+['pages','products','images','variants'].forEach(id=>{
+  const el=document.getElementById(id);
+  el.value=cat[id];
+  el.addEventListener('input',()=>{ cat[id]=pn(el.value); render(); });
+  el.addEventListener('blur',()=>{ el.value=cat[id]; });
+});
+
+document.querySelectorAll('.ig[data-metric]').forEach(ig=>{
+  const k=ig.dataset.metric, inp=ig.querySelector('input'), badge=ig.querySelector('.badge');
+  inp.addEventListener('input',()=>{ if(ov[k]!==null) ov[k]=pn(inp.value); render(); });
+  const tgl=ig.querySelector('.tgl');
+  if(tgl) tgl.addEventListener('click',()=>{
+    if(off[k]){ off[k]=false; ov[k]=null; }
+    else { off[k]=true; }
+    render();
+  });
+  badge.addEventListener('click',function(e){
+    e.preventDefault();   // stop the <label> from forwarding this click to the .tgl toggle button
+    e.stopPropagation();
+    if(ov[k]===null){ ov[k]=metrics()[k]; }
+    else { ov[k]=null; }
+    render();
+    if(ov[k]!==null) inp.focus();
+  });
+});
+
+function toggleProfit(){ document.getElementById('rec').classList.toggle('profit-on'); }
+document.addEventListener('keydown',e=>{ if(e.altKey && (e.key==='p'||e.key==='P')){ e.preventDefault(); toggleProfit(); }});
+(function(){ let n=0,t; const trg=document.querySelector('.kicker'); if(trg) trg.addEventListener('click',()=>{ n++; clearTimeout(t); t=setTimeout(()=>n=0,600); if(n>=3){ n=0; toggleProfit(); }}); })();
+render();
+</script>
+
+<?php wp_footer(); ?>
+</body>
+</html>

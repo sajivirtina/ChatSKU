@@ -17,8 +17,6 @@
 get_header();
 
 // ── WPForms form ID ────────────────────────────────────────────────────────────
-// Must match the Calendly entry-id-only filter in functions.php (chatsku_calendly_redirect_url),
-// which fires only for form 253. Keep this in sync so the redirect passes ONLY ?a1={entry_id}.
 $calc_form_id = 253;
 
 // ── Pricing Estimator — embedded as base64 srcdoc (no second WP page needed) ──
@@ -495,29 +493,6 @@ select option{background:var(--navy-800);color:var(--ink);}
 .step.final .sval{color:var(--amber);font-size:22px;}
 .why{margin-top:22px;padding:16px 18px;background:rgba(7,24,46,.6);border-left:3px solid var(--amber);border-radius:8px;font-size:14px;color:var(--slate);}
 .why b{color:var(--ink);}
-/* Revenue at Risk title (left of the risk card) */
-.rleft{display:flex;flex-direction:column;}
-.rtitle{font-weight:700;font-size:clamp(28px,4vw,40px);letter-spacing:-1px;line-height:1;color:var(--coral);margin-bottom:10px;}
-/* Reasoning accordion */
-.steps{margin:24px 0 0;}
-.steps>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;font-family:var(--mono);font-size:18px;letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin:0 0 4px;}
-.steps>summary::-webkit-details-marker{display:none;}
-.steps>summary::after{content:'+';font-size:24px;line-height:1;color:var(--amber);}
-.steps[open]>summary::after{content:'\2212';}
-/* Recoverable section title + single value */
-.recover-title{font-weight:700;font-size: clamp(24px, 3.4vw, 40px);letter-spacing:-.6px;color:#00c9b1;margin:0 0 18px;}
-.recover-rev{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;}
-.rr-label{font-weight:700;font-size:clamp(24px,3.4vw,40px);color:var(--green);letter-spacing:-.6px;line-height:1.05;}
-.rr-right{text-align:right;}
-.rr-year{font-family:var(--mono);font-weight:700;font-size:clamp(40px,6vw,58px);color:var(--coral);letter-spacing:-2px;line-height:1;}
-.rr-year small{font-size:18px;color:var(--slate);font-weight:500;letter-spacing:0;}
-.rr-life{font-family:var(--mono);font-size:16px;color:var(--muted);margin-top:6px;}
-.rr-life #recRevLife{color:var(--coral);font-weight:700;}
-/* Recovery controls: two across now that the cost fields are hidden */
-.recover .grid4{grid-template-columns:1fr 1fr;}
-@media(max-width:560px){.recover .grid4{grid-template-columns:1fr;}}
-/* Free-plan note in the CTA */
-.cta-free{color:var(--amber);font-size:18px;margin-top:14px;}
 
 .recover{padding:24px 28px;margin-top:18px;}
 .out .ol{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;color:var(--slate);text-transform:uppercase;}
@@ -582,7 +557,7 @@ input[type=range]:focus-visible {
 .info{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;border:1px solid var(--muted);color:var(--slate);font-family:Georgia,serif;font-size:10px;font-weight:700;font-style:italic;cursor:pointer;vertical-align:middle;margin:0 3px;transition:.15s;user-select:none;}
 .info:hover{border-color:var(--amber);color:var(--amber);}
 .range-ends{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:8px;letter-spacing:.5px;}
-.pop{display:none;position:absolute;z-index:40;top:36px;left:0;width:272px;max-width:86vw;background:var(--navy-900);border:1px solid var(--amber);border-radius:10px;padding:13px 15px;font-size:12.5px;line-height:1.52;color:var(--slate);box-shadow:0 18px 40px -14px rgba(0,0,0,.75);}
+.pop{display:none;position:absolute;z-index:40;top:36px;left:0;width:272px;max-width:86vw;background:var(--navy-900);border:1px solid var(--amber);border-radius:10px;padding:13px 15px;font-size:12.5px;line-height:1.52;color:var(--slate);box-shadow:0 18px 44px -14px rgba(0,0,0,.75);}
 .pop.open{display:block;}
 .pop b{color:var(--ink);}
 .pop .rng{display:block;font-family:var(--mono);color:var(--amber);font-size:10.5px;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;}
@@ -786,46 +761,43 @@ input[type=range]:focus-visible {
 
   <!-- RECOVERY + COST -->
   <div class="c-panel recover">
-    <div class="recover-rev">
-      <div class="rr-label">Recoverable Revenue</div>
-      <div class="rr-right">
-        <div class="rr-year"><span id="recRevYr">$1.32M</span> <small>per year</small></div>
-        <div class="rr-life">Over a <span id="recRevYrs">4</span>-year <span id="recRevLife">$5.3M</span></div>
-      </div>
-    </div>
-    <div class="divider"></div>
-    <h2 class="recover-title">Recoverable</h2>
     <div class="grid4">
       <div class="ctl">
-        <label>Recoverable <span class="info">i</span> <span class="slider-val" id="recV">70%</span></label>
-        <input type="range" id="rec" min="10" max="100" value="70">
-        <div class="range-ends"><span>10%</span><span>100%</span></div>
+        <label>Recoverable <span class="info">i</span> <span class="slider-val" id="recV">35%</span></label>
+        <input type="range" id="rec" min="10" max="60" value="60">
+        <div class="range-ends"><span>10%</span><span>60%</span></div>
         <div class="hint">Share of the leak ChatSKU closes.</div>
-        <div class="pop"><span class="rng">Range 10% to 100%</span><b>The share of the leak ChatSKU recovers</b> by answering buyers from your existing catalog. Higher for stages starting from zero self-serve, like a PDF, where the jump is largest. A directional estimate, tune it to real results.</div>
+        <div class="pop"><span class="rng">Range 10% to 60%</span><b>The share of the leak ChatSKU recovers</b> by answering buyers from your existing catalog. Higher for stages starting from zero self-serve, like a PDF, where the jump is largest. A directional estimate, tune it to real results.</div>
       </div>
       <div class="ctl">
         <label>Customer Lifetime <span class="slider-val" id="yrsV">4 yrs</span></label>
         <input type="range" id="yrs" min="1" max="8" value="4">
         <div class="hint">A recovered buyer reorders for years. B2B accounts run 3 to 7.</div>
       </div>
-      <div class="ctl" style="display:none">
+      <div class="ctl">
         <label style="color: var(--gold)">Setup Cost</label>
         <div class="cost-input"><span>$</span><input id="setup" type="text" inputmode="numeric" value="2,500"></div>
         <div class="hint">One-time onboarding fee.</div>
       </div>
-      <div class="ctl" style="display:none">
+      <div class="ctl">
         <label style="color: var(--gold)">Monthly Cost</label>
         <div class="cost-input"><span>$</span><input id="mo" type="text" inputmode="numeric" value="750"><span class="per">/mo</span></div>
         <div class="hint">Recurring subscription.</div>
       </div>
     </div>
-    <button type="button" class="pe-cta" id="peOpen" style="display:none">Not sure of your ChatSKU cost? Calculate it &rarr;</button>
-    
+    <button type="button" class="pe-cta" id="peOpen">Not sure of your ChatSKU cost? Calculate it &rarr;</button>
+    <div class="divider"></div>
+    <div class="grid4 center">
+      <div class="out amber"><div class="ol">Lifetime Value Recovered</div><div class="ov" id="recLife">$862,400</div><div class="osub" id="recYr">$215,600 / yr</div></div>
+      <div class="out"><div class="ol">Lifetime ChatSKU Cost</div><div class="ov" id="cost">$38,500</div><div class="osub" id="costBreak">$2,500 setup + $750/mo &times; 48</div></div>
+      <div class="out"><div class="ol">Net Lifetime Gain</div><div class="ov" id="net">$823,900</div><div class="osub">recovered minus cost</div></div>
+      <div class="out"><div class="ol" style="color: var(--gold)">Return on Spend</div><div class="ov green" id="roi">22x</div><div class="osub">per $1 invested</div></div>
+    </div>
   </div>
 
   <!-- CTA -->
   <div class="c-panel cta-panel">
-    <div class="cta-h">Stop estimating the leak. <span class="yel">Start the Recovery.</span></div>
+    <div class="cta-h">Stop estimating the leak. <span class="yel">Start closing it.</span></div>
     <p class="cta-sub">Every month the catalog stays static, that revenue keeps walking.</p>
     <!-- <a class="cta-btn" id="ctaBook" href="https://chatsku.com/book" target="_blank" rel="noopener">Book a 15-minute walkthrough &rarr;</a> -->
     <?php if ( $calc_form_id > 0 ) : ?>
@@ -838,7 +810,6 @@ input[type=range]:focus-visible {
           3. Configure admin + user notifications and the confirmation message.
         </div>
       <?php endif; ?>
-    <p class="cta-free">Free plan upto 100 products for 3 months or first quote, which our earlier</p>
   </div>
 
   <!-- LEAD CAPTURE FORM -->
@@ -898,9 +869,8 @@ const BUCKETS={
   plat:{n:'Platform / eCommerce', stages:'Stages 06 to 08 · Portal, eCommerce, Chat', leak:15,
     why:'<b>A working store exists, but discovery and expert answers still fail.</b> 41% of manufacturing buyers cannot locate the products they need even on web stores, and dumb support chat is not commerce. Lowest leak of the three, but far from zero.'}
 };
-let state={rev:10000000, con:70, ss:90, sel:'pdf', rec:70, yrs:4, setup:2500, mo:750};
+let state={rev:10000000, con:70, ss:90, sel:'pdf', rec:60, yrs:4, setup:2500, mo:750};
 let customPricing=false;
-let reasoningOpen=false;
 
 const num=v=>v.toLocaleString('en-US');
 const money=v=>'$'+Math.round(v).toLocaleString('en-US');
@@ -917,31 +887,43 @@ function renderResult(){
   const max=state.rev||1; const w=v=>Math.max(2,(v/max*100))+'%';
   document.getElementById('result').innerHTML=`
     <div class="rhead">
-      <div class="rleft"><div class="rtitle">Revenue at Risk</div><div class="rstages">${b.stages}</div><div class="rname">${b.n}</div></div>
+      <div><div class="rstages">${b.stages}</div><div class="rname">${b.n}</div></div>
       <div class="rnum">
         <div class="rbig">${pct.toFixed(1)}% / ${moneyK(leak)}</div>
-        <div class="rpct">per year</div>
+        <div class="rpct">Revenue at risk per year</div>
         <div class="rmulti">Over a ${state.yrs}-year relationship: <b>${moneyK(leak*state.yrs)}</b></div>
       </div>
     </div>
-    <details class="steps" ${reasoningOpen?'open':''}>
-    <summary class="steps-h">The Details</summary>
+    <div class="steps-h">The reasoning</div>
     <p class="steps-sub">How <b>${money(state.rev)}</b> in revenue narrows to the demand the <b>${b.n}</b> stage puts at risk each year.</p>
     <div class="step"><div class="slabel">Annual revenue<small>the full base</small></div><div class="bar"><i style="width:100%"></i></div><div class="sval">${money(state.rev)}</div></div>
     <div class="step"><div class="slabel">&times; Contestable share &middot; ${state.con}%<small>new + shoppable, not locked-in</small></div><div class="bar"><i style="width:${w(contest)}"></i></div><div class="sval">${money(contest)}</div></div>
     <div class="step"><div class="slabel">&times; Self-serve buyers &middot; ${state.ss}%<small>want a rep-free path</small></div><div class="bar"><i style="width:${w(selfserve)}"></i></div><div class="sval">${money(selfserve)}</div></div>
     <div class="step final"><div class="slabel">&times; Stage leakage &middot; ${b.leak}%<small>lost to defection, abandonment, no-answer</small></div><div class="bar"><i style="width:${w(leak)}"></i></div><div class="sval">${money(leak)}</div></div>
-    <div class="why">${b.why}</div>
-    </details>`;
+    <div class="why">${b.why}</div>`;
   return leak;
 }
 
 function renderRecovery(leak){
   const recYr=leak*(state.rec/100);
   const recLife=recYr*state.yrs;
-  document.getElementById('recRevYr').textContent=moneyK(recYr);
-  document.getElementById('recRevLife').textContent=moneyK(recLife);
-  document.getElementById('recRevYrs').textContent=state.yrs;
+  document.getElementById('recLife').textContent=money(recLife);
+  document.getElementById('recYr').textContent=money(recYr)+' / yr';
+  if(customPricing){
+    document.getElementById('cost').textContent='Custom';
+    document.getElementById('costBreak').textContent='Custom pricing — contact sales';
+    document.getElementById('net').textContent='Custom';
+    document.getElementById('roi').textContent='137x';
+    return;
+  }
+  const months=state.yrs*12;
+  const lifeCost=state.setup + state.mo*months;
+  const net=recLife-lifeCost;
+  document.getElementById('cost').textContent=money(lifeCost);
+  document.getElementById('costBreak').innerHTML=money(state.setup)+' setup + '+money(state.mo)+'/mo × '+months;
+  document.getElementById('net').textContent=money(net);
+  const roiEl=document.getElementById('roi');
+  roiEl.textContent = lifeCost>0 ? (recLife/lifeCost).toFixed(recLife/lifeCost>=10?0:1)+'x' : '—';
 }
 
 function applyCustomPricing(on){
@@ -965,7 +947,7 @@ function renderAll(){
   document.getElementById('yrsV').textContent=state.yrs+' yrs';
   document.getElementById('leakV').textContent=BUCKETS[state.sel].leak+'%';
   fill('con',state.con,15,70); fill('ss',state.ss,40,90);
-  fill('rec',state.rec,10,100); fill('yrs',state.yrs,1,8);
+  fill('rec',state.rec,10,60); fill('yrs',state.yrs,1,8);
   fill('leak',BUCKETS[state.sel].leak,2,35);
   renderRecovery(renderResult());
 }
@@ -1008,11 +990,6 @@ document.querySelectorAll('.pop').forEach(p=>p.addEventListener('click',e=>e.sto
 document.addEventListener('click',()=>document.querySelectorAll('.pop.open').forEach(p=>p.classList.remove('open')));
 
 renderAll();
-
-/* Keep the reasoning accordion's open/closed state across slider re-renders */
-document.getElementById('result').addEventListener('toggle', function(e){
-  if(e.target && e.target.classList && e.target.classList.contains('steps')) reasoningOpen = e.target.open;
-}, true);
 
 /* ── Pricing Estimator modal ───────────────────────────────────────────────────── */
 // Declared at top level so the WPForms bridge (below) can read it
