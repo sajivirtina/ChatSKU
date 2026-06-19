@@ -15,7 +15,7 @@ $hero_subheadline       = chatsku_field( 'hero_subheadline',       false, 'Built
 $hero_primary_cta_text  = chatsku_field( 'hero_primary_cta_text',  false, 'Start Free — No Card Needed' );
 $hero_primary_cta_url   = chatsku_field( 'hero_primary_cta_url',   false, chatsku_option( 'register_url', '/signup/' ) );
 $hero_secondary_cta_text= chatsku_field( 'hero_secondary_cta_text',false, 'Try Live Demo' );
-$hero_secondary_cta_url = chatsku_field( 'hero_secondary_cta_url', false, '/demo-widget/' );
+$hero_secondary_cta_url = chatsku_field( 'hero_secondary_cta_url', false, '/demo/' );
 $hero_image             = chatsku_field( 'hero_image' );
 $hero_stats             = chatsku_field( 'hero_stats', false, [] );
 
@@ -41,10 +41,12 @@ $power_subheading       = chatsku_field( 'power_subheading', false, 'Import your
 // ── Pricing / Trust / CTA ─────────────────────────────────────────────────────
 // Defaults (mockup copy) live in the partials; pass ACF values, null = use partial default.
 $pricing = [
-    'eyebrow'         => chatsku_field( 'pricing_eyebrow',         false, null ),
-    'heading'         => chatsku_field( 'pricing_heading',         false, null ),
-    'intro'           => chatsku_field( 'pricing_intro',           false, null ),
-    'features'        => chatsku_field( 'pricing_features',        false, [] ),
+    'eyebrow'          => chatsku_field( 'pricing_eyebrow',          false, null ),
+    'heading'          => chatsku_field( 'pricing_heading',          false, null ),
+    'intro'            => chatsku_field( 'pricing_intro',            false, null ),
+    'includes_heading' => chatsku_field( 'pricing_includes_heading', false, null ),
+    'includes_sub'     => chatsku_field( 'pricing_includes_sub',     false, null ),
+    'features'         => chatsku_field( 'pricing_features',         false, [] ),
     'plans'           => chatsku_field( 'pricing_plans',           false, [] ),
     'note_text'       => chatsku_field( 'pricing_note_text',       false, null ),
     'note_link1_text' => chatsku_field( 'pricing_note_link1_text', false, null ),

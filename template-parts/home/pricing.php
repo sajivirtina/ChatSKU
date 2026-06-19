@@ -5,19 +5,28 @@
  * Data via get_query_var( 'chatsku_pricing' ); falls back to mockup copy so the
  * section renders correctly before any ACF content is entered.
  *
+ * Layout: a full-width "Every plan includes" panel (shared capabilities) above
+ * three plan cards, each with its own distinct features.
+ *
  * @package ChatSKU
  */
 
 $data    = get_query_var( 'chatsku_pricing', [] );
 $eyebrow = $data['eyebrow'] ?? 'Pricing';
 $heading = $data['heading'] ?? 'Simple pricing that scales with your catalog';
-$intro   = $data['intro']   ?? 'Every plan includes every feature — natural language, image & voice search, international languages, quotes, RFQs, customer groups, and integrations. Toggle on only what you need. Plans differ by scale and support, not by what the assistant can do.';
+$intro   = $data['intro']   ?? 'Every plan includes every feature. Plans differ only by catalog size and support — not by what the assistant can do.';
 
+$includes_heading = $data['includes_heading'] ?? 'Every plan includes';
+$includes_sub     = $data['includes_sub']     ?? 'Toggle on only the capabilities you need — nothing is locked behind a higher tier.';
+
+// Shared capabilities shown in the "Every plan includes" panel (3-col grid).
 $features = $data['features'] ?? [];
 if ( empty( $features ) ) {
     $features = [
         '24/7 product Q&A assistant',
-        'Natural language, image & voice search',
+        'Natural language search',
+        'Image search',
+        'Voice search',
         'International language support',
         'Quote building & RFQ capture',
         'Customer groups & tiered pricing',
@@ -27,6 +36,7 @@ if ( empty( $features ) ) {
     ];
 }
 
+// Plans — each with its OWN feature list.
 $plans = $data['plans'] ?? [];
 if ( empty( $plans ) ) {
     $plans = [
@@ -34,11 +44,16 @@ if ( empty( $plans ) ) {
             'plan_name'        => 'Free Trial',
             'plan_tagline'     => 'For teams who want to see it work on their own catalog',
             'plan_price_label' => 'Free',
-            'plan_price_note'  => 'Up to 100 SKUs · free for 3 months or until your first quote, whichever comes first · no credit card',
+            'plan_price_note'  => 'No credit card required',
             'plan_featured'    => false,
             'plan_badge'       => '',
             'plan_cta_text'    => 'Start Free Trial',
             'plan_cta_url'     => chatsku_option( 'register_url', '/signup/' ),
+            'plan_features'    => [
+                'Up to 100 SKUs',
+                'Free for 3 months or until your first quote, whichever comes first',
+                'Email support',
+            ],
         ],
         [
             'plan_name'        => 'Growth',
@@ -48,7 +63,12 @@ if ( empty( $plans ) ) {
             'plan_featured'    => true,
             'plan_badge'       => 'Most popular',
             'plan_cta_text'    => 'Get a Price',
-            'plan_cta_url'     => '/contact/',
+            'plan_cta_url'     => '/roi-calculator/',
+            'plan_features'    => [
+                'Unlimited SKUs',
+                'Priority onboarding by our team',
+                'Standard support',
+            ],
         ],
         [
             'plan_name'        => 'Enterprise',
@@ -59,15 +79,33 @@ if ( empty( $plans ) ) {
             'plan_badge'       => '',
             'plan_cta_text'    => 'Talk to Sales',
             'plan_cta_url'     => '/contact/',
+            'plan_features'    => [
+                'Multi-catalog & multi-brand',
+                'Hands-on ERP / PIM setup',
+                'SSO & advanced security',
+                'Dedicated success manager',
+            ],
         ],
     ];
 }
 
-$note_text        = $data['note_text']        ?? 'Not sure which plan fits?';
-$note_link1_text  = $data['note_link1_text']  ?? 'Estimate your recoverable revenue';
-$note_link1_url   = $data['note_link1_url']   ?? '/pricing-estimator/';
-$note_link2_text  = $data['note_link2_text']  ?? 'book a 15-minute demo';
-$note_link2_url   = $data['note_link2_url']   ?? '/demo-widget/';
+$note_text       = $data['note_text']       ?? 'Not sure which plan fits?';
+$note_link1_text = $data['note_link1_text'] ?? 'Estimate your recoverable revenue';
+$note_link1_url  = $data['note_link1_url']  ?? '/roi-calculator/';
+$note_link2_text = $data['note_link2_text'] ?? 'book a 15-minute demo';
+$note_link2_url  = $data['note_link2_url']  ?? '/demo/';
+
+// Renders one "✓ text" feature row; accepts a string or an ACF ['feature_text'] row.
+$render_feature = function ( $feature ) {
+    $ftext = is_array( $feature ) ? ( $feature['feature_text'] ?? '' ) : $feature;
+    if ( ! $ftext ) { return; }
+    ?>
+    <li>
+        <svg class="hp-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        <?php echo esc_html( $ftext ); ?>
+    </li>
+    <?php
+};
 ?>
 <section class="home-pricing section-padding" aria-labelledby="home-pricing-heading">
     <div class="container">
@@ -84,11 +122,22 @@ $note_link2_url   = $data['note_link2_url']   ?? '/demo-widget/';
             <?php endif; ?>
         </div>
 
+        <?php if ( ! empty( $features ) ) : ?>
+        <div class="home-pricing__includes reveal">
+            <?php if ( $includes_heading ) : ?><h3 class="hpi-head"><?php echo esc_html( $includes_heading ); ?></h3><?php endif; ?>
+            <?php if ( $includes_sub ) : ?><p class="hpi-sub"><?php echo esc_html( $includes_sub ); ?></p><?php endif; ?>
+            <ul class="hpi-grid">
+                <?php foreach ( $features as $feature ) { $render_feature( $feature ); } ?>
+            </ul>
+        </div>
+        <?php endif; ?>
+
         <div class="home-pricing__grid">
             <?php foreach ( $plans as $i => $plan ) :
-                $featured = ! empty( $plan['plan_featured'] );
-                $badge    = $plan['plan_badge'] ?? '';
-                $delay    = 'reveal-delay-' . min( $i + 1, 4 );
+                $featured  = ! empty( $plan['plan_featured'] );
+                $badge     = $plan['plan_badge'] ?? '';
+                $pfeatures = $plan['plan_features'] ?? [];
+                $delay     = 'reveal-delay-' . min( $i + 1, 4 );
             ?>
                 <div class="hp-card reveal <?php echo esc_attr( $delay ); ?><?php echo $featured ? ' hp-card--featured' : ''; ?>">
                     <?php if ( $badge ) : ?>
@@ -105,17 +154,9 @@ $note_link2_url   = $data['note_link2_url']   ?? '/demo-widget/';
                         <p class="hp-card__note"><?php echo esc_html( $plan['plan_price_note'] ); ?></p>
                     <?php endif; ?>
 
-                    <?php if ( ! empty( $features ) ) : ?>
+                    <?php if ( ! empty( $pfeatures ) ) : ?>
                         <ul class="hp-card__features">
-                            <?php foreach ( $features as $feature ) :
-                                $ftext = is_array( $feature ) ? ( $feature['feature_text'] ?? '' ) : $feature;
-                                if ( ! $ftext ) { continue; }
-                            ?>
-                                <li>
-                                    <svg class="hp-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                                    <?php echo esc_html( $ftext ); ?>
-                                </li>
-                            <?php endforeach; ?>
+                            <?php foreach ( $pfeatures as $feature ) { $render_feature( $feature ); } ?>
                         </ul>
                     <?php endif; ?>
 
@@ -154,13 +195,32 @@ $note_link2_url   = $data['note_link2_url']   ?? '/demo-widget/';
     padding: 4px 14px;
     margin-bottom: var(--space-4);
 }
-.home-pricing__intro { max-width: 760px; margin-left: auto; margin-right: auto; }
+.home-pricing__intro { max-width: 720px; margin-left: auto; margin-right: auto; }
+
+/* Every plan includes — full-width panel */
+.home-pricing__includes {
+    margin-top: var(--space-12);
+    padding: 28px 30px;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-card);
+}
+.hpi-head { text-align: center; font-size: 1.05rem; font-weight: 800; color: var(--color-text-primary); margin: 0; }
+.hpi-sub  { text-align: center; font-size: var(--font-size-sm); color: var(--color-text-muted); margin: 6px 0 22px; }
+.hpi-grid {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 14px 28px; max-width: 980px; margin: 0 auto;
+}
+.hpi-grid li { display: flex; align-items: flex-start; gap: 10px; font-size: var(--font-size-sm); color: var(--color-text-muted); line-height: 1.45; }
+
+/* Plan cards */
 .home-pricing__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 22px;
     align-items: start;
-    margin-top: var(--space-12);
+    margin-top: 22px;
 }
 .hp-card {
     position: relative;
@@ -200,6 +260,10 @@ $note_link2_url   = $data['note_link2_url']   ?? '/demo-widget/';
 .home-pricing__foot a { color: var(--color-accent); font-weight: 600; text-decoration: none; }
 .home-pricing__foot a:hover { text-decoration: underline; }
 @media (max-width: 900px) {
+    .hpi-grid { grid-template-columns: 1fr 1fr; }
     .home-pricing__grid { grid-template-columns: 1fr; max-width: 460px; margin-left: auto; margin-right: auto; }
+}
+@media (max-width: 560px) {
+    .hpi-grid { grid-template-columns: 1fr; }
 }
 </style>

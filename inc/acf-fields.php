@@ -229,8 +229,10 @@ acf_add_local_field_group( [
         [ 'key' => 'field_hp_tab', 'label' => 'Pricing', 'name' => '', 'type' => 'tab', 'placement' => 'left' ],
         [ 'key' => 'field_hp_eyebrow', 'label' => 'Eyebrow', 'name' => 'pricing_eyebrow', 'type' => 'text', 'default_value' => 'Pricing' ],
         [ 'key' => 'field_hp_heading', 'label' => 'Heading', 'name' => 'pricing_heading', 'type' => 'text', 'default_value' => 'Simple pricing that scales with your catalog' ],
-        [ 'key' => 'field_hp_intro', 'label' => 'Intro paragraph', 'name' => 'pricing_intro', 'type' => 'textarea', 'rows' => 3 ],
-        [ 'key' => 'field_hp_features', 'label' => 'Shared features (shown in every plan)', 'name' => 'pricing_features', 'type' => 'repeater', 'min' => 0, 'max' => 20, 'layout' => 'table', 'button_label' => 'Add feature',
+        [ 'key' => 'field_hp_intro', 'label' => 'Intro paragraph', 'name' => 'pricing_intro', 'type' => 'textarea', 'rows' => 3, 'default_value' => 'Every plan includes every feature. Plans differ only by catalog size and support — not by what the assistant can do.' ],
+        [ 'key' => 'field_hp_includes_heading', 'label' => '"Every plan includes" heading', 'name' => 'pricing_includes_heading', 'type' => 'text', 'default_value' => 'Every plan includes' ],
+        [ 'key' => 'field_hp_includes_sub', 'label' => '"Every plan includes" subtext', 'name' => 'pricing_includes_sub', 'type' => 'textarea', 'rows' => 2 ],
+        [ 'key' => 'field_hp_features', 'label' => 'Every plan includes — shared features (3-column panel)', 'name' => 'pricing_features', 'type' => 'repeater', 'min' => 0, 'max' => 20, 'layout' => 'table', 'button_label' => 'Add feature',
             'sub_fields' => [
                 [ 'key' => 'field_hp_feature_text', 'label' => 'Feature', 'name' => 'feature_text', 'type' => 'text' ],
             ]
@@ -245,6 +247,11 @@ acf_add_local_field_group( [
                 [ 'key' => 'field_hp_plan_badge', 'label' => 'Badge text', 'name' => 'plan_badge', 'type' => 'text', 'instructions' => 'e.g. Most popular. Leave blank for none.' ],
                 [ 'key' => 'field_hp_plan_cta_text', 'label' => 'Button text', 'name' => 'plan_cta_text', 'type' => 'text' ],
                 [ 'key' => 'field_hp_plan_cta_url', 'label' => 'Button URL', 'name' => 'plan_cta_url', 'type' => 'text' ],
+                [ 'key' => 'field_hp_plan_features', 'label' => 'Plan features (this plan only)', 'name' => 'plan_features', 'type' => 'repeater', 'min' => 0, 'max' => 12, 'layout' => 'table', 'button_label' => 'Add feature',
+                    'sub_fields' => [
+                        [ 'key' => 'field_hp_plan_feature_text', 'label' => 'Feature', 'name' => 'feature_text', 'type' => 'text' ],
+                    ]
+                ],
             ]
         ],
         [ 'key' => 'field_hp_note_text', 'label' => 'Footnote text', 'name' => 'pricing_note_text', 'type' => 'text', 'default_value' => 'Not sure which plan fits?' ],

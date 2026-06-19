@@ -22,7 +22,7 @@ $c2_eyebrow = $data['card2_eyebrow'] ?? 'Want to see it first';
 $c2_title   = $data['card2_title']   ?? 'Get a guided demo';
 $c2_body    = $data['card2_body']    ?? 'Prefer to watch it work on a catalog like yours before you commit? Book a 15-minute walkthrough with our team.';
 $c2_btn     = $data['card2_btn_text'] ?? 'See Live Demo';
-$c2_url     = $data['card2_btn_url']  ?? '/demo-widget/';
+$c2_url     = $data['card2_btn_url']  ?? '/demo/';
 ?>
 <section class="cta-section section-padding" aria-labelledby="cta-heading">
     <div class="cta-glow cta-glow--1" aria-hidden="true"></div>
