@@ -232,6 +232,9 @@ acf_add_local_field_group( [
         [ 'key' => 'field_hp_intro', 'label' => 'Intro paragraph', 'name' => 'pricing_intro', 'type' => 'textarea', 'rows' => 3, 'default_value' => 'Every plan includes every feature. Plans differ only by catalog size and support — not by what the assistant can do.' ],
         [ 'key' => 'field_hp_includes_heading', 'label' => '"Every plan includes" heading', 'name' => 'pricing_includes_heading', 'type' => 'text', 'default_value' => 'Every plan includes' ],
         [ 'key' => 'field_hp_includes_sub', 'label' => '"Every plan includes" subtext', 'name' => 'pricing_includes_sub', 'type' => 'textarea', 'rows' => 2 ],
+        [ 'key' => 'field_hp_includes_cta_label', 'label' => '"Every plan includes" CTA — label', 'name' => 'pricing_includes_cta_label', 'type' => 'text', 'default_value' => 'Monthly cost depends on usage' ],
+        [ 'key' => 'field_hp_includes_cta_text', 'label' => '"Every plan includes" CTA — button text', 'name' => 'pricing_includes_cta_text', 'type' => 'text', 'default_value' => 'Calculate It' ],
+        [ 'key' => 'field_hp_includes_cta_url', 'label' => '"Every plan includes" CTA — button URL', 'name' => 'pricing_includes_cta_url', 'type' => 'text', 'default_value' => '/pricing' ],
         [ 'key' => 'field_hp_features', 'label' => 'Every plan includes — shared features (3-column panel)', 'name' => 'pricing_features', 'type' => 'repeater', 'min' => 0, 'max' => 20, 'layout' => 'table', 'button_label' => 'Add feature',
             'sub_fields' => [
                 [ 'key' => 'field_hp_feature_text', 'label' => 'Feature', 'name' => 'feature_text', 'type' => 'text' ],

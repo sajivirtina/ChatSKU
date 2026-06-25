@@ -19,6 +19,10 @@ $intro   = $data['intro']   ?? 'Every plan includes every feature. Plans differ 
 $includes_heading = $data['includes_heading'] ?? 'Every plan includes';
 $includes_sub     = $data['includes_sub']     ?? 'Toggle on only the capabilities you need — nothing is locked behind a higher tier.';
 
+$includes_cta_label = $data['includes_cta_label'] ?? 'Monthly cost depends on usage';
+$includes_cta_text  = $data['includes_cta_text']  ?? 'Calculate It';
+$includes_cta_url   = $data['includes_cta_url']   ?? '/pricing';
+
 // Shared capabilities shown in the "Every plan includes" panel (3-col grid).
 $features = $data['features'] ?? [];
 if ( empty( $features ) ) {
@@ -63,7 +67,7 @@ if ( empty( $plans ) ) {
             'plan_featured'    => true,
             'plan_badge'       => 'Most popular',
             'plan_cta_text'    => 'Get a Price',
-            'plan_cta_url'     => '/roi-calculator/',
+            'plan_cta_url'     => '/pricing/',
             'plan_features'    => [
                 'Unlimited SKUs',
                 'Priority onboarding by our team',
@@ -129,6 +133,12 @@ $render_feature = function ( $feature ) {
             <ul class="hpi-grid">
                 <?php foreach ( $features as $feature ) { $render_feature( $feature ); } ?>
             </ul>
+            <?php if ( $includes_cta_text ) : ?>
+            <div class="hpi-cta">
+                <?php if ( $includes_cta_label ) : ?><p class="hpi-cta__label"><?php echo esc_html( $includes_cta_label ); ?></p><?php endif; ?>
+                <a href="<?php echo esc_url( $includes_cta_url ); ?>" class="chatsku-btn chatsku-btn--primary hpi-cta__btn"><?php echo esc_html( $includes_cta_text ); ?></a>
+            </div>
+            <?php endif; ?>
         </div>
         <?php endif; ?>
 
@@ -213,6 +223,9 @@ $render_feature = function ( $feature ) {
     gap: 14px 28px; max-width: 980px; margin: 0 auto;
 }
 .hpi-grid li { display: flex; align-items: flex-start; gap: 10px; font-size: var(--font-size-sm); color: var(--color-text-muted); line-height: 1.45; }
+.hpi-cta { text-align: center; margin-top: 28px; }
+.hpi-cta__label { font-size: var(--font-size-base); font-weight: 700; color: var(--color-text-primary); margin: 0 0 14px; }
+.hpi-cta__btn { min-width: 260px; justify-content: center; }
 
 /* Plan cards */
 .home-pricing__grid {

@@ -537,7 +537,9 @@ const num=v=>v.toLocaleString('en-US');
 const money=v=>'$'+Math.round(v).toLocaleString('en-US');
 const moneyK=v=>{v=Math.round(v); if(v>=1e6)return '$'+(v/1e6).toFixed(2).replace(/\.?0+$/,'')+'M'; if(v>=1e3)return '$'+Math.round(v/1e3)+'K'; return '$'+v;};
 const parseNum=s=>parseInt((s||'').toString().replace(/[^0-9]/g,''))||0;
-const fill=(id,val,min,max)=>document.getElementById(id).style.setProperty('--p',((val-min)/(max-min)*100)+'%');
+const fill=(id,val,min,max)=>{const e=document.getElementById(id); if(e) e.style.setProperty('--p',((val-min)/(max-min)*100)+'%');};
+// Null-safe text write — a removed/renamed element must never abort the script (which would kill the modals).
+const setTxt=(id,val)=>{const e=document.getElementById(id); if(e) e.textContent=val;};
 
 function renderResult(){
   const b=BUCKETS[state.sel];
@@ -570,9 +572,9 @@ function renderResult(){
 function renderRecovery(leak){
   const recYr=leak*(state.rec/100);
   const recLife=recYr*state.yrs;
-  document.getElementById('recRevYr').textContent=moneyK(recYr);
-  document.getElementById('recRevLife').textContent=moneyK(recLife);
-  document.getElementById('recRevYrs').textContent=state.yrs;
+  setTxt('recRevYr', moneyK(recYr));
+  setTxt('recRevLife', moneyK(recLife));
+  setTxt('recRevYrs', state.yrs);
 }
 
 function applyCustomPricing(on){
@@ -590,12 +592,12 @@ function applyCustomPricing(on){
 }
 
 function renderAll(){
-  document.getElementById('conV').textContent=state.con+'%';
-  document.getElementById('ssV').textContent=state.ss+'%';
-  document.getElementById('recV').textContent=state.rec+'%';
-  var recRec=document.getElementById('recRecoverablelity'); if(recRec) recRec.textContent=state.rec+'%';
-  document.getElementById('yrsV').textContent=state.yrs+' yrs';
-  document.getElementById('leakV').textContent=BUCKETS[state.sel].leak+'%';
+  setTxt('conV', state.con+'%');
+  setTxt('ssV', state.ss+'%');
+  setTxt('recV', state.rec+'%');
+  setTxt('recRecoverablelity', state.rec+'%');
+  setTxt('yrsV', state.yrs+' yrs');
+  setTxt('leakV', BUCKETS[state.sel].leak+'%');
   fill('con',state.con,15,70); fill('ss',state.ss,40,90);
   fill('rec',state.rec,10,100); fill('yrs',state.yrs,1,8);
   fill('leak',BUCKETS[state.sel].leak,2,35);

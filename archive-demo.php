@@ -2,9 +2,14 @@
 /**
  * Archive: Demos — public listing at /demos/.
  *
- * Lists every published demo as a card with a CTA that opens the demo page.
- * Keeps the site header/footer (this is a navigable hub, unlike the demo pages
- * themselves, which are header/footer-free white canvases).
+ * Shows an industry card for each published Industry post. Each card has:
+ *  - Featured image (set on the Industry post)
+ *  - Title (post title)
+ *  - Description (ACF: industry_description)
+ *  - One or more CTA links (ACF repeater: industry_cta_links)
+ *
+ * Individual demo pages (/demos/{slug}/) are still served by single-demo.php
+ * and are unaffected by this template.
  *
  * @package ChatSKU
  */
@@ -12,42 +17,62 @@
 defined( 'ABSPATH' ) || exit;
 
 get_header();
+
+$industries = new WP_Query( [
+	'post_type'      => 'industry',
+	'posts_per_page' => -1,
+	'orderby'        => 'menu_order',
+	'order'          => 'ASC',
+	'no_found_rows'  => true,
+] );
 ?>
 
 <main id="main" class="chatsku-main demo-listing section-padding" role="main">
 	<div class="container">
 
 		<header class="demo-listing__head">
-			<h1 class="demo-listing__title"><?php post_type_archive_title(); ?></h1>
-			<p class="demo-listing__sub">Explore our live ChatSKU demos — click any to try it.</p>
+			<h1 class="demo-listing__title">Demos by Industry</h1>
+			<p class="demo-listing__sub">Choose your industry to explore a live ChatSKU demo built for your catalog.</p>
 		</header>
 
-		<?php if ( have_posts() ) : ?>
+		<?php if ( $industries->have_posts() ) : ?>
 		<div class="demo-listing__grid">
 			<?php
-			while ( have_posts() ) :
-				the_post();
-				$summary  = function_exists( 'get_field' ) ? get_field( 'demo_summary' ) : '';
-				$demo_url = get_permalink();
+			while ( $industries->have_posts() ) :
+				$industries->the_post();
+				$description = function_exists( 'get_field' ) ? get_field( 'industry_description' ) : '';
+				$cta_links   = function_exists( 'get_field' ) ? get_field( 'industry_cta_links' )   : [];
 			?>
 			<article class="demo-card">
-				<a href="<?php echo esc_url( $demo_url ); ?>" class="demo-card__thumb" aria-label="<?php echo esc_attr( get_the_title() ); ?>">
+				<div class="demo-card__thumb" aria-label="<?php echo esc_attr( get_the_title() ); ?>">
 					<?php if ( has_post_thumbnail() ) : ?>
-						<?php the_post_thumbnail( 'chatsku-card', [ 'class' => 'demo-card__img' ] ); ?>
+						<?php the_post_thumbnail( 'large', [ 'class' => 'demo-card__img' ] ); ?>
 					<?php else : ?>
 						<span class="demo-card__placeholder"><?php echo esc_html( get_the_title() ); ?></span>
 					<?php endif; ?>
-				</a>
+				</div>
 				<div class="demo-card__body">
 					<h2 class="demo-card__title"><?php the_title(); ?></h2>
-					<?php if ( $summary ) : ?><p class="demo-card__summary"><?php echo esc_html( $summary ); ?></p><?php endif; ?>
-					<a href="<?php echo esc_url( $demo_url ); ?>" class="demo-card__cta">View demo &rarr;</a>
+					<?php if ( $description ) : ?>
+						<p class="demo-card__summary"><?php echo esc_html( $description ); ?></p>
+					<?php endif; ?>
+					<?php if ( ! empty( $cta_links ) ) : ?>
+						<div class="demo-card__ctas">
+							<?php foreach ( $cta_links as $link ) :
+								$label = $link['cta_label'] ?? '';
+								$url   = $link['cta_url']   ?? '';
+								if ( ! $label || ! $url ) continue;
+							?>
+								<a href="<?php echo esc_url( $url ); ?>" class="demo-card__cta"><?php echo esc_html( $label ); ?> &rarr;</a>
+							<?php endforeach; ?>
+						</div>
+					<?php endif; ?>
 				</div>
 			</article>
-			<?php endwhile; ?>
+			<?php endwhile; wp_reset_postdata(); ?>
 		</div>
 		<?php else : ?>
-			<p class="demo-listing__empty">No demos published yet.</p>
+			<p class="demo-listing__empty">No industries published yet.</p>
 		<?php endif; ?>
 
 	</div>
@@ -66,7 +91,8 @@ get_header();
 .demo-card__body { padding: 18px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
 .demo-card__title { font-size: 1.05rem; font-weight: 700; color: var(--color-text-primary, #f8fafc); margin: 0; }
 .demo-card__summary { font-size: 0.85rem; color: var(--color-text-muted, #94a3b8); margin: 0; line-height: 1.55; }
-.demo-card__cta { margin-top: auto; align-self: flex-start; color: var(--color-accent, #00C9B1); font-size: 0.9rem; font-weight: 700; text-decoration: none; }
+.demo-card__ctas { margin-top: auto; display: flex; flex-direction: column; gap: 6px; }
+.demo-card__cta { align-self: flex-start; color: var(--color-accent, #00C9B1); font-size: 0.9rem; font-weight: 700; text-decoration: none; }
 .demo-card__cta:hover { text-decoration: underline; }
 .demo-listing__empty { text-align: center; color: var(--color-text-muted, #94a3b8); }
 </style>

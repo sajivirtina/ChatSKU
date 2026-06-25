@@ -9,16 +9,10 @@
  *
  * @package ChatSKU
  */
-?><!DOCTYPE html>
-<html <?php language_attributes(); ?>>
-<head>
-<meta charset="<?php bloginfo( 'charset' ); ?>">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ChatSKU Pricing Estimator</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<?php wp_head(); ?>
+
+get_header();
+
+?>
 <style>
 :root{
   --navy-900:#07182E; --navy-800:#0B2545; --navy-700:#103257;
@@ -28,11 +22,8 @@
   --sans:'Archivo',system-ui,sans-serif; --mono:'IBM Plex Mono',monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{overflow-x:hidden;}
-body{font-family:var(--sans);color:var(--ink);
-  background:radial-gradient(140% 120% at 15% 0%, #103257 0%, #0B2545 45%, #06121F 100%);
-  background-attachment:fixed;min-height:100vh;line-height:1.45;padding:38px 22px 60px;}
-.wrap{max-width:1080px;margin:0 auto;}
+
+.wrap{max-width:1270px;margin:0 auto; padding: 100px 15px 40px }
 .kicker{font-family:var(--mono);font-size:12px;letter-spacing:5px;color:var(--amber);text-transform:uppercase;font-weight:600;}
 h1{font-size:clamp(30px,5vw,50px);font-weight:800;letter-spacing:-1.2px;line-height:1.02;margin:12px 0 10px;}
 h1 .yel{color:var(--amber);}
@@ -80,7 +71,20 @@ h1 .yel{color:var(--amber);}
 .rec-price .m{font-family:var(--mono);font-weight:700;font-size:38px;color:var(--amber);letter-spacing:-2px;line-height:1;}
 .rec-price .m small{font-size:15px;color:var(--slate);font-weight:500;letter-spacing:0;}
 .rec-price .setup{font-family:var(--mono);font-size:12px;color:var(--slate);margin-top:7px;}
-.metarow{display:flex;gap:20px;flex-wrap:wrap;margin-top:16px;}
+.metarow{display:flex;gap:20px;flex-wrap:wrap;margin-top:16px;     justify-content: space-between;
+    align-items: center;}
+    .aBox a {
+    display: inline-block;
+    padding: 11px 16px;
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.15));
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #000;
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s;
+    background: #00c9b1;
+}
 .meta .ml{font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;}
 .meta .mv{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--ink);margin-top:3px;}
 .curve{margin-top:18px;}
@@ -127,7 +131,10 @@ h1 .yel{color:var(--amber);}
 .tgl.on::after{left:16px;background:#fff;}
 .ig.is-off .row{opacity:.45;}
 .ig.is-off .badge{opacity:.4;pointer-events:none;}
-
+.hidden {display: none;}
+.aBox a.orangBg {
+  background: #f4b324;
+}
 @media(max-width:560px){
   .grid2{grid-template-columns:1fr;}
   .profit-grid{grid-template-columns:1fr 1fr;}
@@ -137,9 +144,7 @@ h1 .yel{color:var(--amber);}
   .sub{font-size:14px;}
 }
 </style>
-</head>
-<body <?php body_class( 'chatsku-pricing-estimator-embed' ); ?>>
-<?php wp_body_open(); ?>
+
 
 <div class="wrap">
   <div class="brand">CHATSKU &middot; PRICING</div>
@@ -222,15 +227,19 @@ h1 .yel{color:var(--amber);}
     <!-- RESULT -->
     <div class="panel rec" id="rec">
       <div class="rec-top">
-        <div><div class="rec-plan-label">Your Estimate</div><div class="rec-plan" id="recName">Your Plan</div></div>
-        <div class="rec-price"><div class="m" id="recM">$629<small>/mo</small></div><div class="setup" id="recSetup">+ $4,000 setup</div></div>
+        <div><div class="rec-plan-label hidden"></div><div class="rec-plan">Your Approximate Usage</div><div class="hidden" id="recName"></div></div>
+        <div class="rec-price hidden"><div class="m" id="recM">$629<small>/mo</small></div><div class="setup" id="recSetup">+ $4,000 setup</div></div>
       </div>
       <div class="metarow">
         <div class="meta"><div class="ml">Usage</div><div class="mv" id="mUsage">1.2M SKUBits</div></div>
-        <div class="meta"><div class="ml">SKUBit Price</div><div class="mv" id="mMarg">$0.0005</div></div>
-        <div class="meta"><div class="ml" id="mOverLbl">Overage / SKUBit</div><div class="mv" id="mOver">$0.0007</div></div>
+        <div class="meta hidden"><div class="ml">SKUBit Price</div><div class="mv" id="mMarg">$0.0005</div></div>
+        <div class="meta hidden"><div class="ml" id="mOverLbl">Overage / SKUBit</div><div class="mv" id="mOver">$0.0007</div></div>
+        <div class="meta aBox">
+          <a href="<?php echo site_url('/roi-calculator'); ?>" class="orangBg">Calculate Your ROI</a>
+          <a href="<?php echo site_url('/contact'); ?>">Find Out Your Cost</a>
+        </div>
       </div>
-      <div class="curve">
+      <div class="curve hidden">
         <div class="curve-h"><span>Where you land</span><span>$299 &rarr; $1,149</span></div>
         <div class="curve-track"><div class="curve-dot" id="curveDot"></div></div>
       </div>
@@ -405,6 +414,6 @@ document.addEventListener('keydown',e=>{ if(e.altKey && (e.key==='p'||e.key==='P
 render();
 </script>
 
-<?php wp_footer(); ?>
-</body>
-</html>
+
+
+<?php get_footer(); ?>

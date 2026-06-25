@@ -28,10 +28,14 @@ if ( function_exists( 'acf_add_options_page' ) ) {
 if ( function_exists( 'acf_add_local_field_group' ) ) {
     require_once CHATSKU_DIR . '/inc/acf-fields.php';
     require_once CHATSKU_DIR . '/inc/acf-fields-demo.php';
+    require_once CHATSKU_DIR . '/inc/acf-fields-industry.php';
 }
 
 // Demo custom post type + [chatsku_demo_widget] shortcode
 require_once CHATSKU_DIR . '/inc/cpt-demo.php';
+
+// Industry custom post type (shown as cards on the /demos/ listing page)
+require_once CHATSKU_DIR . '/inc/cpt-industry.php';
 
 // Bespoke Calgary Chocolate Factory live-demo section — [chatsku_calgary_demo]
 require_once CHATSKU_DIR . '/inc/shortcode-calgary-demo.php';
